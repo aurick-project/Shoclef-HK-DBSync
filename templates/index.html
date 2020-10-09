@@ -1,1 +1,103 @@
-<h1>Hello World</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shoclef.hk DB Sync</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/oneui.css' %}">
+
+    <script src="{% static 'js/oneui.core.min.js' %}"></script>
+    <script src="{% static 'js/oneui.app.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.5.0.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+
+</head>
+<body>
+<div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-boxed side-trans-enabled">
+    <main id="main-container">
+        <div class="row">
+            <div class="col-xl-4 offset-1">
+                <div class="block">
+                    <div class="block-content">
+                        <table class="table table-borderless table-striped table-vcenter font-size-sm">
+                            <tbody>
+                            <tr>
+                                <td>Woocommerce Rest Api Connection</td>
+                                <td>{% if woo_connect %} <i class="fa fa-circle"></i> {% else %} <i class="fa fa-times"></i> {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Mongo DB Connection</td>
+                                <td>{% if mongo_connect %} <i class="fa fa-circle"></i> {% else %} <i class="fa fa-times"></i> {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Mysql DB Connection</td>
+                                <td>{% if mysql_connect %} <i class="fa fa-circle"></i> {% else %} <i class="fa fa-times"></i> {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Mysql Log DB Connection</td>
+                                <td>{% if mysql_log_connect %} <i class="fa fa-circle"></i> {% else %} <i class="fa fa-times"></i> {% endif %}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 offset-1">
+                <div class="block">
+                    <div class="block-content">
+                        <table class="table table-borderless table-striped table-vcenter font-size-sm">
+                            <tbody>
+                            <tr>
+                                <td><a href="{% url 'Sync Products' 1 %}" class="btn btn-primary">Sync Products</a></td>
+                                <td><a href="{% url 'Sync Products' 0 %}" class="btn btn-danger">Stop</a></td>
+                            </tr>
+                            <tr>
+                                <td><hr></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="btn btn-warning">Delete Products</a></td>
+                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+                            </tr>
+                            <tr>
+                                <td><hr></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="btn btn-primary">Sync Users</a></td>
+                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+                            </tr>
+                            <tr>
+                                <td><hr></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="btn btn-warning">Delete Users</a></td>
+                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+                            </tr>
+                            <tr>
+                                <td><hr></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="btn btn-primary">Sync Livestreams</a></td>
+                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+
+                            <tr>
+                                <td><hr></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="btn btn-warning">Delete Livestreams</a></td>
+                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+
+<script>
+
+</script>
+
+</html>
