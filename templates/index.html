@@ -33,10 +33,6 @@
                                 <td>Mysql DB Connection</td>
                                 <td>{% if mysql_connect %} <i class="fa fa-circle"></i> {% else %} <i class="fa fa-times"></i> {% endif %}</td>
                             </tr>
-                            <tr>
-                                <td>Mysql Log DB Connection</td>
-                                <td>{% if mysql_log_connect %} <i class="fa fa-circle"></i> {% else %} <i class="fa fa-times"></i> {% endif %}</td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -92,6 +88,9 @@
                 </div>
             </div>
         </div>
+    <div>
+        {{ prods }}
+    </div>
     </main>
 </div>
 </body>

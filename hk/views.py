@@ -5,28 +5,28 @@ from django.shortcuts import redirect, render
 from configparser import ConfigParser
 from hk.woocommerce_connect import *
 from hk.mysql_connect import *
+from hk.settings import *
+
 
 # Create your views here.
 def index(request):
-    config = get_config()
+
     content = {
         'woo_connect':   False,
         'mongo_connect': False,
         'mysql_connect': False,
         'mysql_log_connect': False
     }
-    if config:
-        wapi = woo_api(config['woocommerce'])
-        if wapi:
-            content['woo_connect'] = True
+    wapi = woo_api(woocommerce)
+    if wapi:
+        content['woo_connect'] = True
+        prods = wapi.get('products')
+        content['prods'] = prods.content.decode('utf-8')
 
-        mysql_db = mysql_db_connect(config['mysql'])
-        if mysql_db:
-            content['mysql_connect'] = True
+    mysql_db = mysql_db_connect(mysql)
+    if mysql_db:
+        content['mysql_connect'] = True
 
-        mysql_log_db = mysql_log_connect(config['mysql'])
-        if mysql_log_db:
-            content['mysql_log_connect'] = True
     return render(request, 'index.html', content)
 
 
