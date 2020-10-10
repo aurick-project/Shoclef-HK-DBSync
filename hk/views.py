@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from configparser import ConfigParser
 from hk.woocommerce_connect import *
 from hk.mysql_connect import *
+from hk.mongo_connect import *
 from hk.settings import *
 
 
@@ -22,6 +23,10 @@ def index(request):
         content['woo_connect'] = True
         prods = wapi.get('products')
         content['prods'] = prods.content.decode('utf-8')
+
+    mapi = mongo_connect(mongo['url'])
+    if mapi:
+        content['mongo_connect'] = True
 
     mysql_db = mysql_db_connect(mysql)
     if mysql_db:
