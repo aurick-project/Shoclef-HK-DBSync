@@ -13,10 +13,10 @@
 
 </head>
 <body>
-<div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-boxed side-trans-enabled">
+<div id="page-container" class="enable-page-overlay side-scroll page-header-fixed main-content-boxed side-trans-enabled">
     <main id="main-container">
         <div class="row">
-            <div class="col-xl-4 offset-1">
+            <div class="col-xl-4">
                 <div class="block">
                     <div class="block-content">
                         <table class="table table-borderless table-striped table-vcenter font-size-sm">
@@ -38,49 +38,155 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 offset-1">
+            <div class="col-xl-8">
                 <div class="block">
                     <div class="block-content">
                         <table class="table table-borderless table-striped table-vcenter font-size-sm">
                             <tbody>
                             <tr>
-                                <td><a href="{% url 'Sync Products' 1 %}" class="btn btn-primary">Sync Products</a></td>
-                                <td><a href="{% url 'Sync Products' 0 %}" class="btn btn-danger">Stop</a></td>
+                                <td><a href="{% if current_state != 'categories' %}{% url 'Set Status' 'categories' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'categories' %}disabled{% endif %}">{% if current_state == 'categories' %}
+                                    <i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Categories</a></td>
+                                <td><a href="{% if current_state == 'categories' %}{% url 'Set Status' 'categories' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'categories' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'categories_delete' %}{% url 'Set Status' 'categories_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'categories_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'categories_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Categories</a></td>
+                                <td><a href="{% if current_state == 'categories_delete' %}{% url 'Set Status' 'categories_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'categories_delete' %}disabled{% endif %}">Stop</a></td>
                             </tr>
                             <tr>
-                                <td><hr></td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
                             </tr>
                             <tr>
-                                <td><a href="#" class="btn btn-warning">Delete Products</a></td>
-                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+                                <td><a href="{% if current_state != 'products' %}{% url 'Set Status' 'products' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'products' %}disabled{% endif %}">{% if current_state == 'products' %}
+                                    <i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Products</a></td>
+                                <td><a href="{% if current_state == 'products' %}{% url 'Set Status' 'products' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'products' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'products_delete' %}{% url 'Set Status' 'products_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'products_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'products_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Products</a></td>
+                                <td><a href="{% if current_state == 'products_delete' %}{% url 'Set Status' 'products_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'products_delete' %}disabled{% endif %}">Stop</a></td>
                             </tr>
                             <tr>
-                                <td><hr></td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
                             </tr>
                             <tr>
-                                <td><a href="#" class="btn btn-primary">Sync Users</a></td>
-                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+                                <td><a href="{% if current_state != 'users' %}{% url 'Set Status' 'users' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'users' %}disabled{% endif %}">{% if current_state == 'users' %}
+                                    <i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Users</a></td>
+                                <td><a href="{% if current_state == 'users' %}{% url 'Set Status' 'users' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'users' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'users_delete' %}{% url 'Set Status' 'users_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'users_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'users_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Users</a></td>
+                                <td><a href="{% if current_state == 'users_delete' %}{% url 'Set Status' 'users_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'users_delete' %}disabled{% endif %}">Stop</a></td>
                             </tr>
                             <tr>
-                                <td><hr></td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
                             </tr>
-                            <tr>
-                                <td><a href="#" class="btn btn-warning">Delete Users</a></td>
-                                <td><a href="#" class="btn btn-danger">Stop</a></td>
-                            </tr>
-                            <tr>
-                                <td><hr></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#" class="btn btn-primary">Sync Livestreams</a></td>
-                                <td><a href="#" class="btn btn-danger">Stop</a></td>
 
                             <tr>
-                                <td><hr></td>
+                                <td><a href="{% if current_state != 'livestreams' %}{% url 'Set Status' 'livestreams' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'livestreams' %}disabled{% endif %}">
+                                    {% if current_state == 'livestreams' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Livestreams</a></td>
+                                <td><a href="{% if current_state == 'livestreams' %}{% url 'Set Status' 'livestreams' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'livestreams' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'livestreams_delete' %}{% url 'Set Status' 'livestreams_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'livestreams_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'livestreams_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Livestreams</a></td>
+                                <td><a href="{% if current_state == 'livestreams_delete' %}{% url 'Set Status' 'livestreams_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'livestreams_delete' %}disabled{% endif %}">Stop</a></td>
                             </tr>
                             <tr>
-                                <td><a href="#" class="btn btn-warning">Delete Livestreams</a></td>
-                                <td><a href="#" class="btn btn-danger">Stop</a></td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="{% if current_state != 'orders' %}{% url 'Set Status' 'orders' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'orders' %}disabled{% endif %}">
+                                    {% if current_state == 'orders' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Orders</a></td>
+                                <td><a href="{% if current_state == 'orders' %}{% url 'Set Status' 'orders' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'orders' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'orders_delete' %}{% url 'Set Status' 'orders_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'orders_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'orders_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Orders</a></td>
+                                <td><a href="{% if current_state == 'orders_delete' %}{% url 'Set Status' 'orders_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'orders_delete' %}disabled{% endif %}">Stop</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="{% if current_state != 'payments' %}{% url 'Set Status' 'payments' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'payments' %}disabled{% endif %}">
+                                    {% if current_state == 'payments' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Payments</a></td>
+                                <td><a href="{% if current_state == 'payments' %}{% url 'Set Status' 'payments' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'payments' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'payments_delete' %}{% url 'Set Status' 'payments_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'payments_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'payments_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Payments</a></td>
+                                <td><a href="{% if current_state == 'payments_delete' %}{% url 'Set Status' 'payments_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'payments_delete' %}disabled{% endif %}">Stop</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -88,15 +194,24 @@
                 </div>
             </div>
         </div>
-    <div>
-        {{ prods }}
-    </div>
     </main>
 </div>
 </body>
-
 <script>
+    {% if current_state != '' %}
+        {#setInterval(get_status, 1000);#}
+        get_status();
+        function get_status() {
+            $.ajax({
+                url: '{% url 'Get Status' current_state %}',
+                type: 'get',
+                success: function (data, response, xhr) {
+                    {#window.location.href = '{% url 'index' %}'#}
+                    location.reload()
+                }
+            })
+        }
+    {% endif %}
 
 </script>
-
 </html>
