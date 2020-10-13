@@ -56,7 +56,7 @@ def check_products(request):
     for mp in m_products:
         same_prod = mongo_db['products'].find({'title': mp['title']})
         if same_prod.count() > 1:
-            duplicated[mp['id']] = []
+            duplicated[mp['_id']] = []
             for sp in same_prod:
                 if sp['_id'] != mp['_id']:
                     duplicated[mp['_id']].append(sp)
