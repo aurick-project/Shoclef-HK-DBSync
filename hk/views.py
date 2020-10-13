@@ -55,7 +55,7 @@ def check_products(request):
 
     for mp in m_products:
         same_prod = mongo_db['products'].find({'title': mp['title']})
-        if same_prod.count > 1:
+        if same_prod.count() > 1:
             for sp in same_prod:
                 pprint(sp)
                 break
