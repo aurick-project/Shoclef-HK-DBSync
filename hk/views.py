@@ -54,7 +54,10 @@ def check_products(request):
     missing_customcarrier = []
     missing_customcarrier_value = []
 
+    prod_cnt = 0
     for mp in m_products:
+        prod_cnt += 1
+        print(prod_cnt, mp['_id'])
         missing_assets_for_one = []
         mp_assets = mp['assets']
         if mp_assets:
