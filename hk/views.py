@@ -47,6 +47,7 @@ def check_products(request):
     mongo_db = mapi[mongo['dbname']]
     m_products = mongo_db['products'].find()
     duplicated = {}
+    duplicated_ids = []
     missing_assets = []
     missing_shipping_box = []
     missing_sellerinfo = []
@@ -54,10 +55,13 @@ def check_products(request):
     missing_customcarrier_value = []
 
     for mp in m_products:
+        if mp['_id'] in duplicated_ids:
+            continue
         same_prod = mongo_db['products'].find({'title': mp['title']})
         if same_prod.count() > 1:
             duplicated[mp['_id']] = []
             for sp in same_prod:
+                duplicated_ids.append(sp['_id'])
                 if sp['_id'] != mp['_id']:
                     duplicated[mp['_id']].append(sp)
     pprint(duplicated)
