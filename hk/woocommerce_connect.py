@@ -1,3 +1,5 @@
+import json
+import requests
 from woocommerce import API
 
 
@@ -134,4 +136,16 @@ def woo_tag(wcapi, woo_id='', slug=''):
             return tag.json()
     except:
         print('get category error')
+    return None
+
+
+# add user
+def woo_user_insert(data):
+    try:
+        r = requests.request('POST', data['url'], headers=data['header'], data=data['data'])
+        print(data['data'], r.content)
+        if r.status_code == 200:
+            return json.loads(r.content)['id']
+    except Exception as e:
+        print(e)
     return None

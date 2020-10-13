@@ -44,9 +44,30 @@
                         <table class="table table-borderless table-striped table-vcenter font-size-sm">
                             <tbody>
                             <tr>
+                                <td><a href="{% url 'Check Products' %}" class="btn btn-sm btn-primary">Check Mongo Products</a></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                                <td>
+                                    <hr>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td><a href="{% if current_state != 'categories' %}{% url 'Set Status' 'categories' 1 %}{% else %}#{% endif %}"
-                                       class="btn btn-primary {% if current_state != '' and current_state != 'categories' %}disabled{% endif %}">{% if current_state == 'categories' %}
-                                    <i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Categories</a></td>
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'categories' %}disabled{% endif %}">
+                                    {% if current_state == 'categories' %}
+                                        <i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Categories</a></td>
                                 <td><a href="{% if current_state == 'categories' %}{% url 'Set Status' 'categories' 0 %}{% else %}#{% endif %}"
                                        class="btn btn-danger {% if current_state != '' and current_state != 'categories' %}disabled{% endif %}">Stop</a></td>
                                 <td><a href="{% if current_state != 'categories_delete' %}{% url 'Set Status' 'categories_delete' 1 %}{% else %}#{% endif %}"

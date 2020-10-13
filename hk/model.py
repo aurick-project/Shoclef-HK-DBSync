@@ -104,3 +104,27 @@ def save_product_to_log(mongo_id='', woo_id='', category=''):
             exist_product.save()
     except:
         pass
+
+
+def get_user_from_log(mongo_id='', woo_id='', name='', email=''):
+    try:
+        exist_user = None
+        if mongo_id != '':
+            exist_user = WUsers.objects.get(mongo_id=mongo_id)
+        if woo_id != '':
+            exist_user = WUsers.objects.get(woo_id=woo_id)
+        if name != '':
+            exist_user = WUsers.objects.get(user_name=name)
+        if email != '':
+            exist_user = WUsers.objects.get(email=email)
+        if mongo_id != '' and woo_id != '':
+            exist_user = WUsers.objects.get(woo_id=woo_id, mongo_id=mongo_id)
+        return exist_user
+    except:
+        print('get user from log not exist')
+    return None
+
+
+def save_user_to_log(mongo_id, woo_id, name, email):
+    new_user = WUsers(mongo_id=mongo_id, woo_id=woo_id, user_name=name, email=email)
+    new_user.save()

@@ -40,6 +40,18 @@ class Products(models.Model):
         return 'woo:%s mongo:%s' % (self.woo_id, self.mongo_id)
 
 
+class WUsers(models.Model):
+    id = models.AutoField(primary_key=True)
+    woo_id = models.CharField(default='', max_length=100)
+    mongo_id = models.CharField(default='', max_length=100)
+    user_name = models.CharField(default='', max_length=100)
+    email = models.CharField(default='', max_length=100)
+    avatar = models.CharField(default='', max_length=100)
+
+    def __str__(self):
+        return 'woo:%s mongo:%s' % (self.woo_id, self.mongo_id)
+
+
 class Assets(models.Model):
     id = models.AutoField(primary_key=True)
     woo_id = models.CharField(default='', max_length=100)

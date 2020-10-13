@@ -9,6 +9,9 @@ from hk.scripts.products import *
 from hk.scripts.categories import *
 from hk.scripts.tags import *
 from hk.scripts.users import *
+from hk.scripts.livestreams import *
+from hk.scripts.orders import *
+from hk.scripts.payments import *
 
 
 # Create your views here.
@@ -39,6 +42,26 @@ def index(request):
     return render(request, 'index.html', content)
 
 
+def check_products(request):
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+    m_products = mongo_db['products'].find()
+    duplicated = []
+    missing_assets = []
+    missing_shipping_box = []
+    missing_sellerinfo = []
+    missing_customcarrier = []
+    missing_customcarrier_value = []
+
+    for mp in m_products:
+        same_prod = mongo_db['products'].find({'title': mp['title']})
+        if same_prod.count > 1:
+            for sp in same_prod:
+                pprint(sp)
+                break
+    return HttpResponse('OK')
+
+
 def set_status(request, title, state):
     print('-' * 30)
     print('Set status %s %s' % (title, state))
@@ -58,6 +81,20 @@ def start_sync(request, title):
         start_sync_categories_delete()
     elif title == 'users':
         start_sync_users()
+    elif title == 'users_delete':
+        start_sync_users_delete()
+    elif title == 'livestreams':
+        start_sync_livestreams()
+    elif title == 'livestreams_delete':
+        start_sync_livestreams_delete()
+    elif title == 'orders':
+        start_sync_orders()
+    elif title == 'orders_delete':
+        start_sync_orders_delete()
+    elif title == 'payments':
+        start_sync_payments()
+    elif title == 'payments_delete':
+        start_sync_payments_delete()
     return HttpResponse('Hello')
 
 
@@ -197,8 +234,126 @@ def start_sync_users():
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
+    users = mongo_db['users'].find().limit(10)
+    for user in users:
+        print('-' * 30)
+        # check if user exist in log
+        exist_user = get_user_from_log(user['_id'])
+        if exist_user:
+            print('user exist in woocmmerce %s' % exist_user.woo_id)
+        else:
+            user_add(mongo_db, wapi, user)
+
+    save_status('users', 0)
+
+
+def start_sync_users_delete():
+    print('start syncing users')
+    print('-' * 30)
+    print('get users from mongo')
+    wapi = woo_api(woocommerce)
+
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
     users = mongo_db['users'].find()
     for user in users:
         pprint(user)
 
-    save_status('users', 0)
+    save_status('users_delete', 0)
+
+
+def start_sync_livestreams():
+    print('start syncing livestreams')
+    print('-' * 30)
+    print('get users from mongo')
+    wapi = woo_api(woocommerce)
+
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
+    users = mongo_db['users'].find()
+    for user in users:
+        pprint(user)
+
+    save_status('livestreams', 0)
+
+
+def start_sync_livestreams_delete():
+    print('start syncing livestreams_delete')
+    print('-' * 30)
+    print('get users from mongo')
+    wapi = woo_api(woocommerce)
+
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
+    users = mongo_db['users'].find()
+    for user in users:
+        pprint(user)
+
+    save_status('livestreams_delete', 0)
+
+
+def start_sync_orders():
+    print('start syncing orders')
+    print('-' * 30)
+    print('get users from mongo')
+    wapi = woo_api(woocommerce)
+
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
+    users = mongo_db['users'].find()
+    for user in users:
+        pprint(user)
+
+    save_status('orders', 0)
+
+
+def start_sync_orders_delete():
+    print('start syncing orders_delete')
+    print('-' * 30)
+    print('get users from mongo')
+    wapi = woo_api(woocommerce)
+
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
+    users = mongo_db['users'].find()
+    for user in users:
+        pprint(user)
+
+    save_status('orders_delete', 0)
+
+
+def start_sync_payments():
+    print('start syncing payments')
+    print('-' * 30)
+    print('get users from mongo')
+    wapi = woo_api(woocommerce)
+
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
+    users = mongo_db['users'].find()
+    for user in users:
+        pprint(user)
+
+    save_status('payments', 0)
+
+
+def start_sync_payments_delete():
+    print('start syncing payments_delete')
+    print('-' * 30)
+    print('get users from mongo')
+    wapi = woo_api(woocommerce)
+
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
+    users = mongo_db['users'].find()
+    for user in users:
+        pprint(user)
+
+    save_status('payments_delete', 0)
