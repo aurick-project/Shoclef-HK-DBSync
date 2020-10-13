@@ -63,7 +63,7 @@ def check_products(request):
             for sp in same_prod:
                 duplicated_ids.append(sp['_id'])
                 if sp['_id'] != mp['_id']:
-                    duplicated[mp['_id']].append(sp)
+                    duplicated[mp['_id']].append(sp['_id'])
     pprint(duplicated)
     return HttpResponse('OK')
 
