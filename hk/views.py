@@ -46,7 +46,7 @@ def check_products(request):
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
     m_products = mongo_db['products'].find()
-    duplicated = []
+    duplicated = {}
     missing_assets = []
     missing_shipping_box = []
     missing_sellerinfo = []
@@ -56,9 +56,10 @@ def check_products(request):
     for mp in m_products:
         same_prod = mongo_db['products'].find({'title': mp['title']})
         if same_prod.count() > 1:
+            duplicated[mp['id']] = []
             for sp in same_prod:
                 if sp['_id'] != mp['_id']:
-                    duplicated.append({'origin': mp['_id'], 'duplicate': sp})
+                    duplicated[mp['_id']].append(sp)
     pprint(duplicated)
     return HttpResponse('OK')
 
