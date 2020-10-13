@@ -57,8 +57,9 @@ def check_products(request):
         same_prod = mongo_db['products'].find({'title': mp['title']})
         if same_prod.count() > 1:
             for sp in same_prod:
-                pprint(sp)
-                break
+                if sp['_id'] != mp['_id']:
+                    duplicated.append({'origin': mp['_id'], 'duplicate': sp})
+    pprint(duplicated)
     return HttpResponse('OK')
 
 
