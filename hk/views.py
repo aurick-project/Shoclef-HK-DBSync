@@ -48,13 +48,26 @@ def check_products(request):
     m_products = mongo_db['products'].find()
     duplicated = {}
     duplicated_ids = []
-    missing_assets = []
+    missing_assets = {}
     missing_shipping_box = []
     missing_sellerinfo = []
     missing_customcarrier = []
     missing_customcarrier_value = []
 
     for mp in m_products:
+        missing_assets_for_one = []
+        mp_assets = mp['assets']
+        if mp_assets:
+            for mp_asset in mp_assets:
+                ma = mongo_db['assets'].find({'_id': mp_asset})
+                if ma:
+                    response = requests.get(ma['url'])
+                    if response.status_code != 200:
+                        missing_assets_for_one.append(mp_asset)
+                else:
+                    missing_assets_for_one.append(mp_asset)
+        if missing_assets_for_one:
+            missing_assets[mp['_id']] = missing_assets_for_one
         if mp['_id'] in duplicated_ids:
             continue
         same_prod = mongo_db['products'].find({'title': mp['title']})
@@ -64,7 +77,14 @@ def check_products(request):
                 duplicated_ids.append(sp['_id'])
                 if sp['_id'] != mp['_id']:
                     duplicated[mp['_id']].append(sp['_id'])
+    print('-' * 50)
+    print('duplicated')
     pprint(duplicated)
+
+    print('-' * 50)
+    print('missing assets')
+    pprint(missing_assets)
+
     return HttpResponse('OK')
 
 
