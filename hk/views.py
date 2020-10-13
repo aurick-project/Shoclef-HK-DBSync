@@ -59,7 +59,7 @@ def check_products(request):
         mp_assets = mp['assets']
         if mp_assets:
             for mp_asset in mp_assets:
-                ma = mongo_db['assets'].find({'_id': mp_asset})
+                ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
                     response = requests.get(ma['url'])
                     if response.status_code != 200:
