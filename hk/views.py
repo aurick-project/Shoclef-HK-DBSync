@@ -226,7 +226,6 @@ def start_sync_products():
         if int(woo_prod_id) > 0:
             print('product insert success %s' % woo_prod_id)
         else:
-            break
             print('product insert failed')
     save_status('products', 0)
 
