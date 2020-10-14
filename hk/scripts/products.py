@@ -52,13 +52,15 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
                 mongo_asset = mapi['assets'].find_one({'_id': mp_image})
                 # check if image exist on url
                 if mongo_asset:
-                    response = requests.get(mongo_asset['url'])
-                    if response.status_code == 200:
+                    response = requests.head(mongo_asset['url'])
+                    image_formats = ("image/png", "image/jpeg", "image/jpg")
+                    if response.headers['content-type'] not in image_formats:
                         mp_assets.append({
                             'src':  mongo_asset['url'],
                             'name': mongo_asset['_id']
                         })
                     else:
+                        print('invalid image', response.headers['content-type'])
                         invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
                         invalid_asset_to_log.save()
                 else:
