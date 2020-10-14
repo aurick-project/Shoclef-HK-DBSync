@@ -1,6 +1,5 @@
 import json
 from pprint import pprint
-import grequests
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from hk.mysql_connect import *
