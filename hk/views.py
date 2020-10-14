@@ -201,14 +201,15 @@ def start_sync_products():
         exist_in_log = get_product_from_log(mongo_id=mp['_id'])
         if exist_in_log:
             print('product exist in log db')
+            continue
             # check if exist in woocommerce
-            exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
-            if exist_in_woo:
-                print('product exist in woocommerce')
-                woo_prod_id = exist_in_woo['id']
-                # check all info same with mongo and woocommerce product
-            else:
-                woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
+            # exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
+            # if exist_in_woo:
+            #     print('product exist in woocommerce')
+            #     woo_prod_id = exist_in_woo['id']
+            #     check all info same with mongo and woocommerce product
+            # else:
+            #     woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
         else:
             print('product not exist in log db')
             # check if exist in woocommerce
