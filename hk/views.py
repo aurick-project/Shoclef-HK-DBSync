@@ -260,7 +260,7 @@ def start_sync_users():
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
-    users = mongo_db['users'].find().limit(10)
+    users = mongo_db['users'].find()
     for user in users:
         print('-' * 30)
         # check if user exist in log
