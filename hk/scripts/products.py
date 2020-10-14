@@ -58,6 +58,12 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
                             'src':  mongo_asset['url'],
                             'name': mongo_asset['_id']
                         })
+                    else:
+                        invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
+                        invalid_asset_to_log.save()
+                else:
+                    invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
+                    invalid_asset_to_log.save()
     if mp_assets:
         product_data['images'] = mp_assets
     woo_id = 0

@@ -188,7 +188,7 @@ def start_sync_products():
 
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
-    m_products = mongo_db['products'].find().limit(10)
+    m_products = mongo_db['products'].find()
     for mp in m_products:
         sync_statues = get_status('products')
         if sync_statues.state == 0:

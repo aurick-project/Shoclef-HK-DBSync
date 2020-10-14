@@ -71,3 +71,11 @@ class Livestream(models.Model):
 
     def __str__(self):
         return 'woo:%s mongo:%s' % (self.woo_id, self.mongo_id)
+
+
+class InvalidAssets(models.Model):
+    id = models.AutoField(primary_key=True)
+    mongo_id = models.CharField(default='', max_length=100)
+
+    def __str__(self):
+        return 'mongo:%s' % self.mongo_id
