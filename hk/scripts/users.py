@@ -34,7 +34,11 @@ def user_add(mapi, wapi, user):
         wp_usermeta = mysql_update_table(mysql_conn, mysql_cursor, 'wp_usermeta', {'meta_value': 'a:1:{s:11:"wcfm_vendor";b:1;}'},
                                          "user_id=%s and meta_key='wp_capabilities'" % user_id)
 
-        user_name = user['name'].split(' ').split('-')
+        user_name = user['name']
+        if '-' in user_name:
+            user_name = user_name.split('-')
+        else:
+            user_name = user_name.split(' ')
         first_name = user['name']
         last_name = user['name']
         try:
@@ -125,5 +129,5 @@ def user_delete(mysql_conn, mysql_cursor, user_id):
     wp_user = mysql_select_table(mysql_cursor, 'wp_users', where='ID=%s' % user_id, fetch='one')
     if wp_user:
         mysql_delete_table(mysql_conn, mysql_cursor, 'wp_users', 'ID=%s' % user_id)
-        mysql_delete_table(mysql_conn, mysql_cursor, 'wp_postmeta', 'user_id=%s' % user_id)
+        mysql_delete_table(mysql_conn, mysql_cursor, 'wp_usermeta', 'user_id=%s' % user_id)
 

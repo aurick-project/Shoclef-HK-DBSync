@@ -36,11 +36,12 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
                 image_formats = ("image/png", "image/jpeg", "image/jpg")
                 if response.headers['content-type'] in image_formats:
                     livestream_assets.append({'src': m_asset['url'], 'name': m_asset['_id']})
-        new_livestream.images = livestream_assets
+        new_livestream['images'] = livestream_assets
 
         # add livestream as product
         print('Add livestream as product')
         woo_data = woo_product_insert(wapi, new_livestream)
+        print(woo_data)
         if woo_data:
             woo_id = woo_data['id']
             print('product id', woo_id)
@@ -86,8 +87,8 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
             if 'channel' in livestream and livestream['channel']:
                 livestream_stream_channel = mongo_db['streamchannels'].find_one({'_id': livestream['channel']})
                 if livestream_stream_channel:
-                    if 'record' in livestream_stream_channel and 'sources' in livestream_stream_channel['record'] and livestream_stream_channel['recourd']['sources']:
-                        for stream in livestream_stream_channel['recourd']['sources']:
+                    if 'record' in livestream_stream_channel and 'sources' in livestream_stream_channel['record'] and livestream_stream_channel['record']['sources']:
+                        for stream in livestream_stream_channel['record']['sources']:
                             stream_source = mongo_db['streamsources'].find_one({'_id': stream})
                             if stream_source:
                                 livestream_streamsource_list = mysql_select_table(mysql_cursor, 'wp_postmeta',

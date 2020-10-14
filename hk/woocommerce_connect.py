@@ -57,7 +57,10 @@ def woo_product_one(wcapi, woo_id='', sku=''):
 def woo_product_insert(wcapi, data):
     try:
         product = wcapi.post('products', data)
-        return product.json()
+        if product.status_code in [200, 201]:
+            return product.json()
+        elif product.status_code in [400]:
+            return woo_product_one(wcapi, woo_id=product.json()['resource_id'])
     except:
         print('insert product to woocommerce error')
         print(data)
