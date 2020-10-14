@@ -54,17 +54,17 @@ def user_add(mapi, wapi, user):
         billing_state = ''
         billing_phone = ''
         if 'address' in user:
-            if 'street' in user['address']:
+            if 'street' in user['address'] and user['address']['street']:
                 billing_address_1 = user['address']['street']
-            if 'city' in user['address']:
+            if 'city' in user['address'] and user['address']['city']:
                 billing_city = user['address']['city']
-            if 'zipcode' in user['address']:
+            if 'zipcode' in user['address'] and user['address']['zipcode']:
                 billing_postcode = user['address']['zipcode']
-            if 'country' in user['address']:
+            if 'country' in user['address'] and user['address']['country']:
                 billing_country = user['address']['country']
-            if 'region' in user['address']:
+            if 'region' in user['address'] and user['address']['region']:
                 billing_state = user['address']['region'].split('-')[-1]
-        if 'phone' in user:
+        if 'phone' in user and user['phone']:
             billing_phone = user['phone']
 
         user_avatar = ''
