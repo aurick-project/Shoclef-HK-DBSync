@@ -201,6 +201,10 @@ def start_sync_products():
         exist_in_log = get_product_from_log(mongo_id=mp['_id'])
         if exist_in_log:
             print('product exist in log db')
+            if 'Syca' in mp['title']:
+                exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
+                if exist_in_woo:
+                    update_product(mongo_db, wapi, exist_in_log.woo_id, mp, cc_res)
             continue
             # check if exist in woocommerce
             # exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
