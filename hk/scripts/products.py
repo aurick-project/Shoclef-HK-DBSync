@@ -76,6 +76,7 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
     woo_ins_data = woo_product_insert(wapi, product_data)
     if woo_ins_data:
         if 'id' not in woo_ins_data:
+            mp_assets = []
             for mp_image in mongo_product['assets']:
                 p_image_from_log = get_image_from_log(mongo_id=mp_image, category='product')
                 if p_image_from_log:
