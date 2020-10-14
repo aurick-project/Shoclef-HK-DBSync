@@ -64,9 +64,10 @@ def check_products(request):
             for mp_asset in mp_assets:
                 ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
-                    response = requests.head(ma['url'])
-                    if response.headers['content-type'] not in image_formats:
-                        missing_assets_for_one.append({'state': 'uploaded but not available', 'id': mp_asset})
+                    # response = requests.head(ma['url'])
+                    # if response.headers['content-type'] not in image_formats:
+                    #     missing_assets_for_one.append({'state': 'uploaded but not available', 'id': mp_asset})
+                    continue
                 else:
                     missing_assets_for_one.append({'state': 'not exist', 'id': mp_asset})
         if missing_assets_for_one:
