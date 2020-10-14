@@ -75,6 +75,32 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
     woo_id = 0
     woo_ins_data = woo_product_insert(wapi, product_data)
     if woo_ins_data:
+        if 'id' not in woo_ins_data:
+            for mp_image in mongo_product['assets']:
+                p_image_from_log = get_image_from_log(mongo_id=mp_image, category='product')
+                if p_image_from_log:
+                    mp_assets.append({'id': p_image_from_log.woo_id})
+                else:
+                    mongo_asset = mapi['assets'].find_one({'_id': mp_image})
+                    # check if image exist on url
+                    if mongo_asset:
+                        response = requests.head(mongo_asset['url'])
+                        image_formats = ("image/png", "image/jpeg", "image/jpg")
+                        if response.headers['content-type'] in image_formats:
+                            mp_assets.append({
+                                'src':  mongo_asset['url'],
+                                'name': mongo_asset['_id']
+                            })
+                        else:
+                            print('invalid image', response.headers['content-type'])
+                            invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
+                            invalid_asset_to_log.save()
+                    else:
+                        invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
+                        invalid_asset_to_log.save()
+            if mp_assets:
+                product_data['images'] = mp_assets
+            woo_ins_data = woo_product_insert(wapi, product_data)
         woo_id = woo_ins_data['id']
         if int(woo_id) <= 0:
             return 0
