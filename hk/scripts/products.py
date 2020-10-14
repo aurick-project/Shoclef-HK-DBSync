@@ -1,7 +1,9 @@
 from hk.scripts.categories import *
 from hk.scripts.tags import *
+from hk.settings import hk_mysql
 from hk.woocommerce_connect import *
 from hk.model import *
+from hk.scripts.users import user_add
 
 
 def add_product(mapi, wapi, mongo_product, cc_rate):
@@ -66,6 +68,22 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
         if woo_ins_data['images']:
             for w_image in woo_ins_data['images']:
                 save_image_to_log(w_image['name'], w_image['id'], 'product', woo_id, w_image['src'])
+        exist_author = get_user_from_log(mongo_id=mongo_product['seller'])
+        if exist_author:
+            mysql_conn = mysql_db_connect(hk_mysql)
+            mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+            mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': exist_author.woo_id}, 'ID=%s' % woo_id)
+            mysql_db_close(mysql_conn, mysql_cursor)
+        else:
+            product_user = mapi['users'].find_one({'_id': mongo_product['seller']})
+            if product_user:
+                user_add(mapi, wapi, product_user)
+                exist_author = get_user_from_log(mongo_id=mongo_product['seller'])
+                if exist_author:
+                    mysql_conn = mysql_db_connect(hk_mysql)
+                    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+                    mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': exist_author.woo_id}, 'ID=%s' % woo_id)
+                    mysql_db_close(mysql_conn, mysql_cursor)
     return woo_id
 
 

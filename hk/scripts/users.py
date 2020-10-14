@@ -5,7 +5,7 @@ from hk.model import *
 from hk.woocommerce_connect import *
 
 
-def user_add(mapi, wapi,  user):
+def user_add(mapi, wapi, user):
     # check if user name already exist in log
     name = user['name']
     email = user['email']
@@ -76,7 +76,7 @@ def user_add(mapi, wapi,  user):
                     response = requests.get(mongo_asset['url'])
                     if response.status_code == 200:
                         temp_prod = {
-                            'name': 'temp',
+                            'name':   'temp',
                             'images': [{'src': mongo_asset['url'], 'name': mongo_asset['_id']}]
                         }
 
@@ -119,3 +119,11 @@ def user_add(mapi, wapi,  user):
             else:
                 mysql_insert_table(mysql_conn, mysql_cursor, 'wp_usermeta', {'user_id': user_id, 'meta_key': meta_key, 'meta_value': user_fields[meta_key]})
         mysql_db_close(mysql_conn, mysql_cursor)
+
+
+def user_delete(mysql_conn, mysql_cursor, user_id):
+    wp_user = mysql_select_table(mysql_cursor, 'wp_users', where='ID=%s' % user_id, fetch='one')
+    if wp_user:
+        mysql_delete_table(mysql_conn, mysql_cursor, 'wp_users', 'ID=%s' % user_id)
+        mysql_delete_table(mysql_conn, mysql_cursor, 'wp_postmeta', 'user_id=%s' % user_id)
+

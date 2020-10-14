@@ -1,5 +1,6 @@
 import json
 from pprint import pprint
+import grequests
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from hk.mysql_connect import *
@@ -73,7 +74,7 @@ def check_products(request):
             missing_assets[mp['_id']] = missing_assets_for_one
         if mp['_id'] in duplicated_ids:
             continue
-        same_prod = mongo_db['products'].find({'title': mp['title']})
+        same_prod = mongo_db['products'].find({'title': mp['title'], 'price': mp['price']})
         if same_prod.count() > 1:
             duplicated[mp['_id']] = []
             for sp in same_prod:
@@ -135,7 +136,7 @@ def start_sync_categories():
 
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
-    m_categories = mongo_db['productcategories'].find().limit(10)
+    m_categories = mongo_db['productcategories'].find()
     for mc in m_categories:
         woo_cat_id = add_category(mongo_db, wapi, mc['_id'])
         print('add cateogry %s %s' % (mc['_id'], woo_cat_id))
@@ -282,10 +283,16 @@ def start_sync_users_delete():
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
-    users = mongo_db['users'].find()
-    for user in users:
-        pprint(user)
+    mysql_conn = mysql_db_connect(hk_mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
 
+    wp_users = mysql_select_table(mysql_cursor, 'wp_usermeta', where="meta_key='wp_capabilities' AND meta_value LIKE '%wcfm_vendor%'")
+    if wp_users:
+        for wpu in wp_users:
+            delete_user_from_log(woo_id=wpu['user_id'])
+            user_delete(mysql_conn, mysql_cursor, wpu['user_id'])
+
+    mysql_db_close(mysql_conn, mysql_cursor)
     save_status('users_delete', 0)
 
 

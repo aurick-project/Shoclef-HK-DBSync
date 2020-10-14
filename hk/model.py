@@ -130,6 +130,16 @@ def save_user_to_log(mongo_id, woo_id, name, email):
     new_user.save()
 
 
+def delete_user_from_log(mongo_id='', woo_id=''):
+    exist_user = None
+    if mongo_id != '':
+        exist_user = get_user_from_log(mongo_id=mongo_id)
+    if woo_id != '':
+        exist_user = get_user_from_log(woo_id=woo_id)
+    if exist_user:
+        exist_user.delete()
+
+
 def get_livestream_from_log(mongo_id='', woo_id=''):
     try:
         exist_livestream = None
