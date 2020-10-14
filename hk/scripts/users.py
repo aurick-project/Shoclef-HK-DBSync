@@ -88,7 +88,7 @@ def user_add(mapi, wapi,  user):
                             save_image_to_log(mongo_asset['_id'], woo_temp_image['id'], 'user', source=woo_temp_image['src'])
                             user_avatar = woo_temp_image['id']
                             print('delete temp product for user avatar')
-                            woo_product_delete(wapi, woo_temp_id)
+                            woo_product_delete(wapi, [woo_temp_id])
 
         user_fields = {
             'first_name':           first_name,

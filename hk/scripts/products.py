@@ -71,10 +71,11 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
     return woo_id
 
 
-def delete_product_from_woocommerce(wapi, woo_id):
-    print('delete product from woocommerce %s' % woo_id)
-    woo_product_delete(wapi, woo_id)
-    prod_from_log = get_product_from_log(woo_id=woo_id)
-    if prod_from_log:
-        print('delete product from log %s' % woo_id)
-        prod_from_log.delete()
+def delete_product_from_woocommerce(wapi, woo_ids):
+    woo_product_delete(wapi, woo_ids)
+    for woo_id in woo_ids:
+        print('delete product from woocommerce %s' % woo_id)
+        prod_from_log = get_product_from_log(woo_id=woo_id)
+        if prod_from_log:
+            print('delete product from log %s' % woo_id)
+            prod_from_log.delete()

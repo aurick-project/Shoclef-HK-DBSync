@@ -65,7 +65,8 @@ def woo_product_insert(wcapi, data):
 # delete product
 def woo_product_delete(wcapi, prod_id):
     try:
-        product = wcapi.delete('products/%s' % prod_id, params={'force': True})
+        data = {"delete": prod_id}
+        product = wcapi.post('products/batch', data)
         return product.json()
     except:
         print('Delete product from woocmmerce error', prod_id)
