@@ -128,3 +128,16 @@ def get_user_from_log(mongo_id='', woo_id='', name='', email=''):
 def save_user_to_log(mongo_id, woo_id, name, email):
     new_user = WUsers(mongo_id=mongo_id, woo_id=woo_id, user_name=name, email=email)
     new_user.save()
+
+
+def get_livestream_from_log(mongo_id='', woo_id=''):
+    try:
+        exist_livestream = None
+        if mongo_id != '':
+            exist_livestream = WUsers.objects.get(mongo_id=mongo_id)
+        if woo_id != '':
+            exist_livestream = WUsers.objects.get(woo_id=woo_id)
+        return exist_livestream
+    except:
+        print('get livestream from log not exist')
+    return None

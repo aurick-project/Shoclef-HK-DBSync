@@ -314,10 +314,16 @@ def start_sync_livestreams_delete():
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
-    users = mongo_db['users'].find()
-    for user in users:
-        pprint(user)
-
+    mysql_conn = mysql_db_connect(mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+    woo_livestreams = mysql_select_table(mysql_cursor, 'wp_posts', where='post_type="livestream"')
+    if woo_livestreams:
+        for wl in woo_livestreams:
+            mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % wl['ID'])
+            mysql_delete_table(mysql_conn, mysql_cursor, 'wp_postmeta', 'post_id=%s' % wl['ID'])
+            exist_livestream_in_log = get_livestream_from_log(wl['ID'])
+            if exist_livestream_in_log:
+                exist_livestream_in_log.delete()
     save_status('livestreams_delete', 0)
 
 
