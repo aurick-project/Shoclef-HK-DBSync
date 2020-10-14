@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-from hk.settings import mysql
+from hk.settings import hk_mysql
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'ShoclefHKDbSync.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':     mysql['logname'],
-        'USER':     mysql['username'],
-        'PASSWORD': mysql['password'],
-        'HOST':     mysql['host'],
-        'PORT':     mysql['port'],
+        'NAME':     hk_mysql['logname'],
+        'USER':     hk_mysql['username'],
+        'PASSWORD': hk_mysql['password'],
+        'HOST':     hk_mysql['host'],
+        'PORT':     hk_mysql['port'],
         'OPTIONS':  {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         },

@@ -30,8 +30,7 @@ def index(request):
     mapi = mongo_connect(mongo['url'])
     if mapi:
         content['mongo_connect'] = True
-
-    mysql_db = mysql_db_connect(mysql)
+    mysql_db = mysql_db_connect(hk_mysql)
     if mysql_db:
         content['mysql_connect'] = True
         mysql_db_close(mysql_db)
@@ -299,7 +298,7 @@ def start_sync_livestreams():
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
-    mysql_conn = mysql_db_connect(mysql)
+    mysql_conn = mysql_db_connect(hk_mysql)
     mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
 
     livestreams = mongo_db['livestreams'].find()
@@ -320,7 +319,7 @@ def start_sync_livestreams_delete():
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
-    mysql_conn = mysql_db_connect(mysql)
+    mysql_conn = mysql_db_connect(hk_mysql)
     mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
     woo_livestreams = mysql_select_table(mysql_cursor, 'wp_posts', where='post_type="livestream"')
     if woo_livestreams:

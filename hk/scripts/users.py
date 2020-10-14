@@ -29,7 +29,7 @@ def user_add(mapi, wapi,  user):
     user_id = woo_user_insert(user_data)
     if user_id:
         save_user_to_log(user['_id'], user_id, name, email)
-        mysql_conn = mysql_db_connect(mysql)
+        mysql_conn = mysql_db_connect(hk_mysql)
         mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
         wp_usermeta = mysql_update_table(mysql_conn, mysql_cursor, 'wp_usermeta', {'meta_value': 'a:1:{s:11:"wcfm_vendor";b:1;}'},
                                          "user_id=%s and meta_key='wp_capabilities'" % user_id)

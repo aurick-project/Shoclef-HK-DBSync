@@ -5,7 +5,6 @@ import datetime
 
 # log db
 def mysql_db_connect(database):
-    print()
     print('Connect to db %s' % database['dbname'], end=' ')
 
     try:
