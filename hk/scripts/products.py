@@ -54,7 +54,7 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
                 if mongo_asset:
                     response = requests.head(mongo_asset['url'])
                     image_formats = ("image/png", "image/jpeg", "image/jpg")
-                    if response.headers['content-type'] not in image_formats:
+                    if response.headers['content-type'] in image_formats:
                         mp_assets.append({
                             'src':  mongo_asset['url'],
                             'name': mongo_asset['_id']
