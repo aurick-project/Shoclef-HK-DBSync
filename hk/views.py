@@ -222,7 +222,10 @@ def start_sync_products():
                 print('product not exist in woocommerce')
                 # insert to woocommerce
                 woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
-        print('product insert success %s' % woo_prod_id)
+        if int(woo_prod_id) > 0:
+            print('product insert success %s' % woo_prod_id)
+        else:
+            print('product insert failed')
     save_status('products', 0)
 
 

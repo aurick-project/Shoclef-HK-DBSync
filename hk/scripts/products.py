@@ -52,17 +52,21 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
                 mongo_asset = mapi['assets'].find_one({'_id': mp_image})
                 # check if image exist on url
                 if mongo_asset:
-                    response = requests.head(mongo_asset['url'])
-                    image_formats = ("image/png", "image/jpeg", "image/jpg")
-                    if response.headers['content-type'] in image_formats:
-                        mp_assets.append({
-                            'src':  mongo_asset['url'],
-                            'name': mongo_asset['_id']
-                        })
-                    else:
-                        print('invalid image', response.headers['content-type'])
-                        invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
-                        invalid_asset_to_log.save()
+                    mp_assets.append({
+                        'src':  mongo_asset['url'],
+                        'name': mongo_asset['_id']
+                    })
+                    # response = requests.head(mongo_asset['url'])
+                    # image_formats = ("image/png", "image/jpeg", "image/jpg")
+                    # if response.headers['content-type'] in image_formats:
+                    #     mp_assets.append({
+                    #         'src':  mongo_asset['url'],
+                    #         'name': mongo_asset['_id']
+                    #     })
+                    # else:
+                    #     print('invalid image', response.headers['content-type'])
+                    #     invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
+                    #     invalid_asset_to_log.save()
                 else:
                     invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'])
                     invalid_asset_to_log.save()
@@ -72,6 +76,8 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
     woo_ins_data = woo_product_insert(wapi, product_data)
     if woo_ins_data:
         woo_id = woo_ins_data['id']
+        if int(woo_id) <= 0:
+            return 0
         save_product_to_log(mongo_product['_id'], woo_id, woo_cat_id)
         if woo_ins_data['images']:
             for w_image in woo_ins_data['images']:

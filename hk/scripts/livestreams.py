@@ -72,7 +72,8 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
                         mp = mongo_db['products'].find_one({'_id': lp})
                         if mp:
                             woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
-                            livestream_product_list.append('%s' % woo_prod_id)
+                            if int(woo_prod_id) > 0:
+                                livestream_product_list.append('%s' % woo_prod_id)
 
             # update product list of livestream
             print("update product list of livestream")
