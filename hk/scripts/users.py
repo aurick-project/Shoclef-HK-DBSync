@@ -7,6 +7,7 @@ from hk.woocommerce_connect import *
 
 def user_add(mapi, wapi, user):
     # check if user name already exist in log
+    print(user['_id'])
     name = user['name']
     email = user['email']
     exist_name_log = get_user_from_log(name=name)
