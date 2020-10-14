@@ -231,7 +231,7 @@ def start_sync_products_delete():
     print('-' * 30)
     print('get products delete syncing status from db')
     wapi = woo_api(woocommerce)
-    page = 30
+    page = 1
     per_page = 100
     while True:
         sync_statues = get_status('products_delete')
@@ -298,9 +298,9 @@ def start_sync_livestreams():
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
-    users = mongo_db['users'].find()
-    for user in users:
-        pprint(user)
+    livestreams = mongo_db['livestreams'].find()
+    for livestream in livestreams:
+        pprint(livestream)
 
     save_status('livestreams', 0)
 
