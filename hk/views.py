@@ -263,6 +263,11 @@ def start_sync_users():
     users = mongo_db['users'].find()
     for user in users:
         print('-' * 30)
+        sync_statues = get_status('users')
+        if sync_statues.state == 0:
+            print('-' * 30)
+            print('1 Break syncing...')
+            break
         # check if user exist in log
         exist_user = get_user_from_log(user['_id'])
         if exist_user:
@@ -310,6 +315,11 @@ def start_sync_livestreams():
     livestreams = mongo_db['livestreams'].find()
     for livestream in livestreams:
         print('-' * 30)
+        sync_statues = get_status('livestreams')
+        if sync_statues.state == 0:
+            print('-' * 30)
+            print('1 Break syncing...')
+            break
         print('livestream', livestream['_id'])
         add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream)
     mysql_db_close(mysql_conn, mysql_cursor)
