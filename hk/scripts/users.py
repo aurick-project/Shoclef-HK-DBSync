@@ -39,17 +39,16 @@ def user_add(mapi, wapi, user):
         wp_usermeta = mysql_update_table(mysql_conn, mysql_cursor, 'wp_usermeta', {'meta_value': 'a:1:{s:11:"wcfm_vendor";b:1;}'},
                                          "user_id=%s and meta_key='wp_capabilities'" % user_id)
 
-        user_name = user['name']
-        if '-' in user_name:
-            user_name = user_name.split('-')
+        if '-' in name:
+            user_name = name.split('-')
         else:
-            user_name = user_name.split(' ')
-        first_name = user['name']
-        last_name = user['name']
+            user_name = name.split(' ')
+        first_name = name
+        last_name = name
         try:
             if len(user_name) > 1:
                 first_name = user_name[0]
-                last_name = user['name'].split(first_name)[-1]
+                last_name = name.split(first_name)[-1]
         except:
             pass
         billing_address_1 = ''
