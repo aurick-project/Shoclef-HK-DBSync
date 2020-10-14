@@ -63,8 +63,6 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
     if woo_ins_data:
         woo_id = woo_ins_data['id']
         save_product_to_log(mongo_product['_id'], woo_id, woo_cat_id)
-        new_product = Products(woo_id=woo_id, mongo_id=mongo_product['_id'], category=woo_cat_id)
-        new_product.save()
         if woo_ins_data['images']:
             for w_image in woo_ins_data['images']:
                 save_image_to_log(w_image['name'], w_image['id'], 'product', woo_id, w_image['src'])

@@ -292,16 +292,21 @@ def start_sync_users_delete():
 def start_sync_livestreams():
     print('start syncing livestreams')
     print('-' * 30)
-    print('get users from mongo')
+    print('get livestreams from mongo')
     wapi = woo_api(woocommerce)
 
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
 
+    mysql_conn = mysql_db_connect(mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+
     livestreams = mongo_db['livestreams'].find()
     for livestream in livestreams:
-        pprint(livestream)
-
+        print('-' * 30)
+        print('livestream', livestream['_id'])
+        add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream)
+    mysql_db_close(mysql_conn, mysql_cursor)
     save_status('livestreams', 0)
 
 
@@ -319,11 +324,10 @@ def start_sync_livestreams_delete():
     woo_livestreams = mysql_select_table(mysql_cursor, 'wp_posts', where='post_type="livestream"')
     if woo_livestreams:
         for wl in woo_livestreams:
-            mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % wl['ID'])
-            mysql_delete_table(mysql_conn, mysql_cursor, 'wp_postmeta', 'post_id=%s' % wl['ID'])
-            exist_livestream_in_log = get_livestream_from_log(wl['ID'])
-            if exist_livestream_in_log:
-                exist_livestream_in_log.delete()
+            delete_livestream_from_db(mysql_conn, mysql_cursor, wl['ID'])
+
+    mysql_db_close(mysql_conn, mysql_cursor)
+
     save_status('livestreams_delete', 0)
 
 

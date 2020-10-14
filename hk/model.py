@@ -141,3 +141,8 @@ def get_livestream_from_log(mongo_id='', woo_id=''):
     except:
         print('get livestream from log not exist')
     return None
+
+
+def save_livestream_to_log(mongo_id='', woo_id=''):
+    new_livestream = Livestream(mongo_id=mongo_id, woo_id=woo_id)
+    new_livestream.save()

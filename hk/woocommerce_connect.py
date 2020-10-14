@@ -1,6 +1,8 @@
 import json
 import requests
 from woocommerce import API
+from hk.mysql_connect import *
+from hk.model import *
 
 
 def woo_api(config):
