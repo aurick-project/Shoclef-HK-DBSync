@@ -53,7 +53,7 @@ def check_products(request):
     missing_sellerinfo = []
     missing_customcarrier = []
     missing_customcarrier_value = []
-
+    image_formats = ("image/png", "image/jpeg", "image/jpg")
     prod_cnt = 0
     for mp in m_products:
         prod_cnt += 1
@@ -64,11 +64,11 @@ def check_products(request):
             for mp_asset in mp_assets:
                 ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
-                    response = requests.get(ma['url'])
-                    if response.status_code != 200:
-                        missing_assets_for_one.append(mp_asset)
+                    response = requests.head(ma['url'])
+                    if response.headers['content-type'] not in image_formats:
+                        missing_assets_for_one.append({'state': 'uploaded but not available', 'id': mp_asset})
                 else:
-                    missing_assets_for_one.append(mp_asset)
+                    missing_assets_for_one.append({'state': 'not exist', 'id': mp_asset})
         if missing_assets_for_one:
             missing_assets[mp['_id']] = missing_assets_for_one
         if mp['_id'] in duplicated_ids:
