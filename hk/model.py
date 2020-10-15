@@ -31,6 +31,8 @@ def get_product_from_log(woo_id='', mongo_id=''):
             res = Products.objects.get(mongo_id=mongo_id)
         if woo_id != '' and mongo_id != '':
             res = Products.objects.get(woo_id=woo_id, mongo_id=mongo_id)
+        if woo_id == '' and mongo_id == '':
+            res = Products.objects.all()
         return res
     except:
         pass
@@ -67,7 +69,7 @@ def get_tag_from_log(woo_id='', mongo_id=''):
     return None
 
 
-def get_image_from_log(mongo_id='', woo_id='', category='product'):
+def get_image_from_log(mongo_id='', woo_id='', category='product', parent=''):
     try:
         res = None
         if woo_id != '':
@@ -76,6 +78,8 @@ def get_image_from_log(mongo_id='', woo_id='', category='product'):
             res = Assets.objects.get(mongo_id=mongo_id, category=category)
         if woo_id != '' and mongo_id != '':
             res = Assets.objects.get(mongo_id=mongo_id, woo_id=woo_id, category=category)
+        if parent != '':
+            res = Assets.objects.filter(parent=parent)
         return res
     except:
         pass
@@ -100,7 +104,7 @@ def save_product_to_log(mongo_id='', woo_id='', category=''):
             new_product.save()
         else:
             exist_product.woo_id = woo_id
-            exist_product.category=category
+            exist_product.category = category
             exist_product.save()
     except:
         pass

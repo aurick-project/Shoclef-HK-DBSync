@@ -48,6 +48,14 @@ def check_products(request):
     print('-' * 50)
     print('delete missing assets registered on log')
     missing_assets_log = get_missing_assets_from_log()
+    all_products_from_log = get_product_from_log()
+    for wp in all_products_from_log:
+        have_assets = get_image_from_log(parent=wp.woo_id)
+        if have_assets:
+            continue
+        else:
+            print('Product %s have no assets' % wp.woo_id)
+    return
     for ma in missing_assets_log:
         print('-' * 50)
         print('delete from assets', ma.mongo_id)
