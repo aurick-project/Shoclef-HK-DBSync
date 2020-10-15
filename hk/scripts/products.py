@@ -12,10 +12,10 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
     rate = 1
     if mongo_product['currency'] != 'USD' and mongo_product['currency'].lower() in cc_rate:
         rate = cc_rate[mongo_product['currency'].lower()]['rate']
-    if mongo_product['oldPrice'] not in ['', None]:
+    if 'oldPrice' in mongo_product and mongo_product['oldPrice'] not in ['', None]:
         oldPrice = float(mongo_product['oldPrice']) / 100
         oldPrice = oldPrice / rate
-    if mongo_product['price'] not in ['', None]:
+    if 'price' in mongo_product and mongo_product['price'] not in ['', None]:
         price = float(mongo_product['price']) / 100
         price = price / rate
     if oldPrice == 0 or price == 0:
