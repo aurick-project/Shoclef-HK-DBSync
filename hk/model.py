@@ -144,9 +144,9 @@ def get_livestream_from_log(mongo_id='', woo_id=''):
     try:
         exist_livestream = None
         if mongo_id != '':
-            exist_livestream = WUsers.objects.get(mongo_id=mongo_id)
+            exist_livestream = Livestream.objects.get(mongo_id=mongo_id)
         if woo_id != '':
-            exist_livestream = WUsers.objects.get(woo_id=woo_id)
+            exist_livestream = Livestream.objects.get(woo_id=woo_id)
         return exist_livestream
     except:
         print('get livestream from log not exist')

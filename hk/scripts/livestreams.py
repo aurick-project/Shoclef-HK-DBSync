@@ -6,6 +6,7 @@ from hk.woocommerce_connect import *
 
 
 def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
+    print('-' * 50)
     exist_livestream_in_log = get_livestream_from_log(livestream['_id'])
     if exist_livestream_in_log:
         if livestream['status'] == 'CANCELED':
