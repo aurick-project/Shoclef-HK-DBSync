@@ -264,7 +264,7 @@ def start_sync_products():
             # else:
             #     woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
         else:
-            print('product not exist in log db')
+            print('product not exist in log db', mp['_id'])
             # check if exist in woocommerce
             exist_in_woo = woo_product_one(wapi, sku=mp['_id'])
             if exist_in_woo:
