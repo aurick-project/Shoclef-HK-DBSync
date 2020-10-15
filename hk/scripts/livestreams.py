@@ -59,6 +59,7 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
             livestream_product_list = []
             if 'products' in livestream and livestream['products']:
                 for lp in livestream['products']:
+                    print('get product from log', lp)
                     exist_product_in_log = get_product_from_log(woo_id=lp)
                     if exist_product_in_log:
                         livestream_product_list.append('%s' % exist_product_in_log.woo_id)
