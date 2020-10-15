@@ -41,7 +41,12 @@ def add_category(mapi, wapi, mongo_id):
                                 'src':  cat_image_in_mongo['url'],
                                 'name': cat_image_in_mongo['_id']
                             }]
-
+                        else:
+                            invalid_asset_to_log = InvalidAssets(mongo_id=cat_image_in_mongo['_id'], parent=cat_in_mongo['_id'], category='category')
+                            invalid_asset_to_log.save()
+                    else:
+                        invalid_asset_to_log = InvalidAssets(mongo_id=cat_image_in_mongo['_id'], parent=cat_in_mongo['_id'], category='category')
+                        invalid_asset_to_log.save()
             woo_cat_data = woo_category_insert(wapi, cat_data)
             if woo_cat_data and woo_cat_data.status_code == 201:
                 woo_cat_id = woo_cat_data.json()['id']

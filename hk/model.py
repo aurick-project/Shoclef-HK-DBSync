@@ -156,3 +156,15 @@ def get_livestream_from_log(mongo_id='', woo_id=''):
 def save_livestream_to_log(mongo_id='', woo_id=''):
     new_livestream = Livestream(mongo_id=mongo_id, woo_id=woo_id)
     new_livestream.save()
+
+
+def get_missing_assets_from_log(mongo_id=''):
+    try:
+        if mongo_id != '':
+            i_assets = InvalidAssets.objects.get(mongo_id=mongo_id)
+        else:
+            i_assets = InvalidAssets.objects.all()
+        return i_assets
+    except:
+        print('get invalid assets from log failed', mongo_id)
+    return None
