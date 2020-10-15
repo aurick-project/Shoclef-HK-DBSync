@@ -95,11 +95,11 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
                             if stream_source:
                                 livestream_streamsource_list = mysql_select_table(mysql_cursor, 'wp_postmeta',
                                                                                   where='post_id=%s and meta_key="livestreamsource" and meta_value="%s"' % (
-                                                                                      woo_id, stream_source['source']))
+                                                                                      woo_id, stream_source['source'].replace('http://18.185.121.9:5000', 'https://apprecording.shoclef.com')))
                                 if livestream_streamsource_list:
                                     continue
                                 mysql_insert_table(mysql_conn, mysql_cursor, 'wp_postmeta',
-                                                   {'post_id': woo_id, 'meta_key': "livestreamsource", 'meta_value': stream_source['source']})
+                                                   {'post_id': woo_id, 'meta_key': "livestreamsource", 'meta_value': stream_source['source'].replace('http://18.185.121.9:5000', 'https://apprecording.shoclef.com')})
 
             # update stream status of livestream
             print("update stream status of livestream")

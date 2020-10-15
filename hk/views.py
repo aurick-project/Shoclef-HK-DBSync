@@ -45,17 +45,22 @@ def check_products(request):
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
     m_products = mongo_db['products'].find()
+
+    print('-' * 50)
+    print('delete products without images')
+    mysql_conn = mysql_db_connect(hk_mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+    all_products_from_log = get_product_from_log()
+    for wp in all_products_from_log:
+        image_posts = mysql_select_table(mysql_cursor, 'wp_postmeta', where='meta_key="_product_image_gallery" and post_id=%s' % wp.woo_id)
+        if image_posts is None:
+            print('product %s have not image' % wp.woo_id)
+    mysql_db_close(mysql_conn, mysql_cursor)
+    return HttpResponse('OK')
+
     print('-' * 50)
     print('delete missing assets registered on log')
     missing_assets_log = get_missing_assets_from_log()
-    all_products_from_log = get_product_from_log()
-    for wp in all_products_from_log:
-        have_assets = get_image_from_log(parent=wp.woo_id)
-        if have_assets:
-            continue
-        else:
-            print('Product %s have no assets' % wp.woo_id)
-    return HttpResponse('OK')
     for ma in missing_assets_log:
         print('-' * 50)
         print('delete from assets', ma.mongo_id)
