@@ -57,7 +57,7 @@ def check_products(request):
             print('product %s have not image' % wp.woo_id)
             print('-' * 50)
             print('delete from woocommerce')
-            delete_product_from_woocommerce(wapi, wp.woo_id)
+            delete_product_from_woocommerce(wapi, [wp.woo_id])
             print('-' * 50)
             print('delete from mongo')
             delete_query = {'_id': wp.mongo_id}
