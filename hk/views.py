@@ -247,9 +247,10 @@ def start_sync_products():
         # check if already exist in log
         exist_in_log = get_product_from_log(mongo_id=mp['_id'])
         if exist_in_log:
-            print('product exist in log db')
+            print('product exist in log db', exist_in_log.mongo_id, exist_in_log.woo_id)
 
             if mp['_id'] in fix_products:
+                print('update product')
                 exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
                 if exist_in_woo:
                     update_product(mongo_db, wapi, exist_in_log.woo_id, mp, cc_res)
