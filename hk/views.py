@@ -66,7 +66,7 @@ def check_products(request):
                 print('product deleted from mongo db', wp.mongo_id)
             else:
                 print('product is not available in mongo db', wp.mongo_id)
-            wp.delete()
+            # wp.delete()
 
     mysql_db_close(mysql_conn, mysql_cursor)
     return HttpResponse('OK')
