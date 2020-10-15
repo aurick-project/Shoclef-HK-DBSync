@@ -52,7 +52,7 @@ def check_products(request):
     mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
     all_products_from_log = get_product_from_log()
     for wp in all_products_from_log:
-        image_posts = mysql_select_table(mysql_cursor, 'wp_postmeta', where='meta_key="_product_image_gallery" and post_id=%s' % wp.woo_id, fetch='one')
+        image_posts = mysql_select_table(mysql_cursor, 'wp_postmeta', where='meta_key="_thumbnail_id" and post_id=%s' % wp.woo_id, fetch='one')
         if image_posts in [None, '', []]:
             print('product %s have not image' % wp.woo_id)
     mysql_db_close(mysql_conn, mysql_cursor)
