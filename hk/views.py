@@ -50,11 +50,13 @@ def check_products(request):
     missing_assets_log = get_missing_assets_from_log()
     for ma in missing_assets_log:
         print('-' * 50)
-        print('delete from assets')
+        print('delete from assets', ma.mongo_id)
         delete_query = {'_id': ma.mongo_id}
         if mongo_db['assets'].find_one(delete_query):
             mongo_db['assets'].delete_one(delete_query)
             print('asset deleted from mongo db', ma.mongo_id)
+        else:
+            print('asset is not available in mongo db', ma.mongo_id)
         print('delete from products')
         if ma.category == 'product':
             if ma.parent != '':
@@ -82,11 +84,6 @@ def check_products(request):
 
     duplicated = {}
     duplicated_ids = []
-    missing_assets = {}
-    missing_shipping_box = []
-    missing_sellerinfo = []
-    missing_customcarrier = []
-    missing_customcarrier_value = []
     image_formats = ("image/png", "image/jpeg", "image/jpg")
     prod_cnt = 0
     for mp in m_products:
@@ -117,10 +114,6 @@ def check_products(request):
     print('-' * 50)
     print('duplicated')
     pprint(duplicated)
-
-    print('-' * 50)
-    print('missing assets')
-    pprint(missing_assets)
 
     return HttpResponse('OK')
 
