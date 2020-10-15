@@ -55,7 +55,7 @@ def check_products(request):
             continue
         else:
             print('Product %s have no assets' % wp.woo_id)
-    return
+    return HttpResponse('OK')
     for ma in missing_assets_log:
         print('-' * 50)
         print('delete from assets', ma.mongo_id)
