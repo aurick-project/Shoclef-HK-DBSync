@@ -79,7 +79,7 @@ def get_image_from_log(mongo_id='', woo_id='', category='product', parent=''):
         if woo_id != '' and mongo_id != '':
             res = Assets.objects.get(mongo_id=mongo_id, woo_id=woo_id, category=category)
         if parent != '':
-            res = Assets.objects.filter(parent=parent)
+            res = Assets.objects.filter(parent_id=parent)
         return res
     except:
         pass
