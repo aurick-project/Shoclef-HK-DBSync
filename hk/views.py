@@ -58,7 +58,7 @@ def check_products(request):
         else:
             print('asset is not available in mongo db', ma.mongo_id)
         print('delete from products')
-        if ma.category == 'product' or ma.category == '':
+        if ma.category == 'product':
             if ma.parent != '':
                 m_product = mongo_db['products'].find_one({'_id': ma.parent})
                 if m_product:
