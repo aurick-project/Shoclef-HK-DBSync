@@ -46,7 +46,6 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
         if woo_data:
             woo_id = woo_data['id']
             print('product id', woo_id)
-            save_livestream_to_log(livestream['_id'], woo_id)
             if woo_data['images']:
                 for w_image in woo_data['images']:
                     save_image_to_log(w_image['name'], w_image['id'], 'livestream', woo_id, w_image['src'])
