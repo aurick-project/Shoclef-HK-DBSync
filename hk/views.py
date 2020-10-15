@@ -45,7 +45,7 @@ def check_products(request):
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
     m_products = mongo_db['products'].find()
-
+    wapi = woo_api(woocommerce)
     print('-' * 50)
     print('delete products without images')
     mysql_conn = mysql_db_connect(hk_mysql)
@@ -55,6 +55,18 @@ def check_products(request):
         image_posts = mysql_select_table(mysql_cursor, 'wp_postmeta', where='meta_key="_thumbnail_id" and post_id=%s' % wp.woo_id, fetch='one')
         if image_posts in [None, '', []]:
             print('product %s have not image' % wp.woo_id)
+            print('-' * 50)
+            print('delete from woocommerce')
+            delete_product_from_woocommerce(wapi, wp.woo_id)
+            print('-' * 50)
+            print('delete from mongo')
+            delete_query = {'_id': wp.mongo_id}
+            if mongo_db['products'].find_one(delete_query):
+                mongo_db['products'].delete_one(delete_query)
+                print('product deleted from mongo db', wp.mongo_id)
+            else:
+                print('product is not available in mongo db', wp.mongo_id)
+
     mysql_db_close(mysql_conn, mysql_cursor)
     return HttpResponse('OK')
 
