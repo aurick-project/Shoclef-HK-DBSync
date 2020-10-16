@@ -439,10 +439,10 @@ def start_sync_livestreams_category():
             'name': mlc['name'],
             'slug': mlc['_id']
         }
-        cat_id = woo_category_insert(wapi, cat_data)
-        if cat_id and 'id' in cat_id:
-            mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'livestream_category'}, 'term_id=%s' % cat_id)
-            save_livestream_category_to_log(mlc['_id'], cat_id)
+        cat_data = woo_category_insert(wapi, cat_data)
+        if cat_data and 'id' in cat_data:
+            mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'livestream_category'}, 'term_id=%s' % cat_data['id'])
+            save_livestream_category_to_log(mlc['_id'], cat_data['id'])
 
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('livestreams_category', 0)
