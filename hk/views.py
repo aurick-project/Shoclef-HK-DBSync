@@ -465,6 +465,11 @@ def start_sync_livestreams_category_delete():
             mysql_delete_table(mysql_conn,mysql_cursor,'wp_terms','term_id=%s' % exist_cat.woo_id)
             mysql_delete_table(mysql_conn, mysql_cursor,'wp_term_taxonomy', 'term_id=%s' % woo_id)
             exist_cat.delete()
+    remain_cats = mysql_select_table(mysql_cursor, 'wp_term_taxonomy', where='taxonomy="livestream_category"')
+    if remain_cats:
+        for rc in remain_cats:
+            mysql_delete_table(mysql_conn, mysql_cursor, 'wp_terms', 'term_id=%s' % rc['term_id'])
+            mysql_delete_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', 'term_id=%s' % rc['term_id'])
 
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('livestreams_category_delete', 0)
