@@ -123,7 +123,7 @@ def woo_category_delete(wcapi, cat_id):
 def woo_category_insert(wcapi, cat_data):
     try:
         category = wcapi.post('products/categories', cat_data)
-        print(category.json())
+        # print(category.json())
         return category
     except:
         print('insert category error')
@@ -134,7 +134,7 @@ def woo_category_insert(wcapi, cat_data):
 def woo_tag_insert(wcapi, cat_data):
     try:
         category = wcapi.post('products/tags', cat_data)
-        print(category.json())
+        # print(category.json())
         return category
     except:
         print('insert category error')
