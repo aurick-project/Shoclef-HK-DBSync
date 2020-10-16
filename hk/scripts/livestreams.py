@@ -25,29 +25,7 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
             'slug':              livestream['_id'],
             'sku':               livestream['_id']
         }
-        if 'categories' in livestream:
-            cat_data = []
-            for lc in livestream['categories']:
-                exist_cat = get_livestream_category_from_log(lc)
-                if exist_cat:
-                    print('category added in livestream categories')
-                    cat_data.append({'id': exist_cat.woo_id})
-                else:
-                    print('category not added in livestream categories')
-                    livestream_category = mongo_db['livestreamcategories'].find_one({'_id': lc})
-                    if livestream_category:
-                        print('category found from livestream categories in mongo')
-                        new_cat_id = add_livestream_category(wapi, mongo_db, mysql_conn, mysql_cursor, livestream_category)
-                        if new_cat_id:
-                            print('category added to livestream categories in woo')
-                            cat_data.append({'id': new_cat_id})
-                        else:
-                            print('category not added to livestream categories in woo', new_cat_id)
-                    else:
-                        print('category not exist in mongo', lc)
 
-            if cat_data:
-                new_livestream['categories'] = cat_data
         livestream_assets = []
         exist_assets_log = get_image_from_log(mongo_id=livestream['preview'], category='livestream')
         if exist_assets_log:
@@ -117,11 +95,13 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
                             if stream_source:
                                 livestream_streamsource_list = mysql_select_table(mysql_cursor, 'wp_postmeta',
                                                                                   where='post_id=%s and meta_key="livestreamsource" and meta_value="%s"' % (
-                                                                                      woo_id, stream_source['source'].replace('http://18.185.121.9:5000', 'https://apprecording.shoclef.com')))
+                                                                                      woo_id, stream_source['source'].replace('http://18.185.121.9:5000',
+                                                                                                                              'https://apprecording.shoclef.com')))
                                 if livestream_streamsource_list:
                                     continue
                                 mysql_insert_table(mysql_conn, mysql_cursor, 'wp_postmeta',
-                                                   {'post_id': woo_id, 'meta_key': "livestreamsource", 'meta_value': stream_source['source'].replace('http://18.185.121.9:5000', 'https://apprecording.shoclef.com')})
+                                                   {'post_id':    woo_id, 'meta_key': "livestreamsource",
+                                                    'meta_value': stream_source['source'].replace('http://18.185.121.9:5000', 'https://apprecording.shoclef.com')})
 
             # update stream status of livestream
             print("update stream status of livestream")
@@ -137,6 +117,29 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
             if livestream_user:
                 mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': livestream_user.woo_id}, 'ID=%s' % woo_id)
 
+            # update livestream experience and category
+            if 'categories' in livestream:
+                for lc in livestream['categories']:
+                    exist_cat = get_livestream_category_from_log(lc)
+                    cat_id = None
+                    if exist_cat:
+                        print('category added in livestream categories')
+                        cat_id = exist_cat.woo_id
+                    else:
+                        print('category not added in livestream categories')
+                        livestream_category = mongo_db['livestreamcategories'].find_one({'_id': lc})
+                        if livestream_category:
+                            print('category found from livestream categories in mongo')
+                            new_cat_id = add_livestream_category(wapi, mongo_db, mysql_conn, mysql_cursor, livestream_category)
+                            if new_cat_id:
+                                print('category added to livestream categories in woo')
+                                cat_id = new_cat_id
+                            else:
+                                print('category not added to livestream categories in woo', new_cat_id)
+                        else:
+                            print('category not exist in mongo', lc)
+                    if cat_id:
+                        mysql_insert_table(mysql_conn, mysql_cursor, 'wp_term_relationships', {'object_id': woo_id, 'term_taxonomy_id': cat_id, 'term_order': 0})
             print('save livestream to log')
             save_livestream_to_log(mongo_id=livestream['_id'], woo_id=woo_id)
             return woo_id
