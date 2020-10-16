@@ -142,7 +142,6 @@
                                     <hr>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td><a href="{% if current_state != 'livestreams' %}{% url 'Set Status' 'livestreams' 1 %}{% else %}#{% endif %}"
                                        class="btn btn-primary {% if current_state != '' and current_state != 'livestreams' %}disabled{% endif %}">
@@ -154,6 +153,30 @@
                                     {% if current_state == 'livestreams_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Livestreams</a></td>
                                 <td><a href="{% if current_state == 'livestreams_delete' %}{% url 'Set Status' 'livestreams_delete' 0 %}{% else %}#{% endif %}"
                                        class="btn btn-danger {% if current_state != '' and current_state != 'livestreams_delete' %}disabled{% endif %}">Stop</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="{% if current_state != 'livestreams_category' %}{% url 'Set Status' 'livestreams_category' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'livestreams_category' %}disabled{% endif %}">
+                                    {% if current_state == 'livestreams_category' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Livestreams Categories</a></td>
+                                <td><a href="{% if current_state == 'livestreams_category' %}{% url 'Set Status' 'livestreams_category' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'livestreams_category' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'livestreams_category_delete' %}{% url 'Set Status' 'livestreams_category_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'livestreams_category_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'livestreams_category_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Livestreams Categories</a></td>
+                                <td><a href="{% if current_state == 'livestreams_category_delete' %}{% url 'Set Status' 'livestreams_category_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'livestreams_category_delete' %}disabled{% endif %}">Stop</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="{% if current_state != 'livestreams_experience' %}{% url 'Set Status' 'livestreams_experience' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-primary {% if current_state != '' and current_state != 'livestreams_experience' %}disabled{% endif %}">
+                                    {% if current_state == 'livestreams_experience' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Livestreams Experience</a></td>
+                                <td><a href="{% if current_state == 'livestreams_experience' %}{% url 'Set Status' 'livestreams_experience' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'livestreams_experience' %}disabled{% endif %}">Stop</a></td>
+                                <td><a href="{% if current_state != 'livestreams_experience_delete' %}{% url 'Set Status' 'livestreams_experience_delete' 1 %}{% else %}#{% endif %}"
+                                       class="btn btn-info {% if current_state != '' and current_state != 'livestreams_experience_delete' %}disabled{% endif %}">
+                                    {% if current_state == 'livestreams_experience_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete Livestreams Experience</a></td>
+                                <td><a href="{% if current_state == 'livestreams_experience_delete' %}{% url 'Set Status' 'livestreams_experience_delete' 0 %}{% else %}#{% endif %}"
+                                       class="btn btn-danger {% if current_state != '' and current_state != 'livestreams_experience_delete' %}disabled{% endif %}">Stop</a></td>
                             </tr>
                             <tr>
                                 <td>
