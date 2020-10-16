@@ -155,7 +155,7 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
                     cat_id = exist_cat.woo_id
                 else:
                     print('category not added in livestream experience')
-                    livestream_experience = mongo_db['livestreamexperiences'].find_one({'_id': lc})
+                    livestream_experience = mongo_db['livestreamexperiences'].find_one({'id': lc})
                     if livestream_experience:
                         print('category found from livestream experience in mongo')
                         new_cat_id = add_livestream_experience(wapi, mongo_db, mysql_conn, mysql_cursor, livestream_experience)
