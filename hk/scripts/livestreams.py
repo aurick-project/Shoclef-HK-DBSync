@@ -223,9 +223,10 @@ def add_livestream_experience(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
     if exist_cat:
         return exist_cat.woo_id
 
-    cat_data = {
+    exp_data = {
         'name': mongo_cat['name'],
-        'slug': mongo_cat['_id']
+        'slug': mongo_cat['id'],
+        'description': mongo_cat['description']
     }
     cat_assets = None
     if 'imagePath' in mongo_cat:
@@ -238,8 +239,8 @@ def add_livestream_experience(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
         except:
             pass
     if cat_assets:
-        cat_data['image'] = cat_assets
-    cat_data = woo_category_insert(wapi, cat_data)
+        exp_data['image'] = cat_assets
+    cat_data = woo_tag_insert(wapi, exp_data)
     if cat_data and 'id' in cat_data.json():
         print(cat_data.json()['id'])
         mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'experience'}, 'term_id=%s' % cat_data.json()['id'])
