@@ -131,3 +131,19 @@ def delete_livestream_from_db(mysql_conn, mysql_cursor, woo_id):
             exist_livestream_in_log.delete()
     except:
         print('Delete livestream from woocommerce failed', woo_id)
+
+
+# add livestream category
+def add_livestream_category(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
+    exist_cat = get_livestream_category_from_log(mongo_id=mongo_cat['_id'])
+    if exist_cat:
+        return
+    cat_data = {
+        'name': mongo_cat['name'],
+        'slug': mongo_cat['_id']
+    }
+    cat_data = woo_category_insert(wapi, cat_data)
+    if cat_data and 'id' in cat_data.json():
+        print(cat_data.json()['id'])
+        mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'livestream_category'}, 'term_id=%s' % cat_data.json()['id'])
+        save_livestream_category_to_log(mongo_cat['_id'], cat_data.json()['id'])
