@@ -143,6 +143,32 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
                     if cat_id:
                         mysql_insert_table(mysql_conn, mysql_cursor, 'wp_term_relationships', {'object_id': woo_id, 'term_taxonomy_id': cat_id, 'term_order': 0})
             print('save livestream to log')
+
+            # update livestream experience and category
+            print('update livestream experience and category')
+            if 'experience' in livestream:
+                lc = livestream['experience']
+                exist_cat = get_livestream_category_from_log(lc)
+                cat_id = None
+                if exist_cat:
+                    print('category added in livestream experience')
+                    cat_id = exist_cat.woo_id
+                else:
+                    print('category not added in livestream experience')
+                    livestream_experience = mongo_db['livestreamexperiences'].find_one({'_id': lc})
+                    if livestream_experience:
+                        print('category found from livestream experience in mongo')
+                        new_cat_id = add_livestream_experience(wapi, mongo_db, mysql_conn, mysql_cursor, livestream_experience)
+                        if new_cat_id:
+                            print('category added to livestream experience in woo')
+                            cat_id = new_cat_id
+                        else:
+                            print('category not added to livestream experience in woo', new_cat_id)
+                    else:
+                        print('category not exist in mongo', lc)
+                if cat_id:
+                    mysql_insert_table(mysql_conn, mysql_cursor, 'wp_term_relationships', {'object_id': woo_id, 'term_taxonomy_id': cat_id, 'term_order': 0})
+            print('save livestream to log')
             save_livestream_to_log(mongo_id=livestream['_id'], woo_id=woo_id)
             return woo_id
     return None
@@ -187,5 +213,36 @@ def add_livestream_category(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
         print(cat_data.json()['id'])
         mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'livestream_category'}, 'term_id=%s' % cat_data.json()['id'])
         save_livestream_category_to_log(mongo_cat['_id'], cat_data.json()['id'])
+        return cat_data.json()['id']
+    return None
+
+
+# add livestream category
+def add_livestream_experience(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
+    exist_cat = get_livestream_experience_from_log(mongo_id=mongo_cat['_id'])
+    if exist_cat:
+        return exist_cat.woo_id
+
+    cat_data = {
+        'name': mongo_cat['name'],
+        'slug': mongo_cat['_id']
+    }
+    cat_assets = None
+    if 'imagePath' in mongo_cat:
+        try:
+            response = requests.head(mongo_cat['imagePath'].replace('${cdn.appAssets}', mongo['cdn_url']))
+            image_formats = ("image/png", "image/jpeg", "image/jpg")
+            if response.headers['content-type'] in image_formats:
+                cat_assets = {'src': mongo_cat['imagePath'].replace('${cdn.appAssets}', mongo['cdn_url'])}
+
+        except:
+            pass
+    if cat_assets:
+        cat_data['image'] = cat_assets
+    cat_data = woo_category_insert(wapi, cat_data)
+    if cat_data and 'id' in cat_data.json():
+        print(cat_data.json()['id'])
+        mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'experience'}, 'term_id=%s' % cat_data.json()['id'])
+        save_livestream_experience_to_log(mongo_cat['_id'], cat_data.json()['id'])
         return cat_data.json()['id']
     return None
