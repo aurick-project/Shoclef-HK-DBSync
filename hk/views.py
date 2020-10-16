@@ -402,7 +402,6 @@ def start_sync_livestreams():
 def start_sync_livestreams_delete():
     print('start syncing livestreams_delete')
     print('-' * 30)
-    print('get users from mongo')
     wapi = woo_api(woocommerce)
 
     mapi = mongo_connect(mongo['url'])
