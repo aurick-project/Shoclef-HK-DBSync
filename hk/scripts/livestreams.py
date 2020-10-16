@@ -25,7 +25,20 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
             'slug':              livestream['_id'],
             'sku':               livestream['_id']
         }
-
+        if 'categories' in livestream:
+            cat_data = []
+            for lc in livestream['categories']:
+                exist_cat = get_livestream_category_from_log(lc)
+                if exist_cat:
+                    cat_data.append({'id': exist_cat.woo_id})
+                else:
+                    livestream_category = mongo_db['livestreamcategories'].find_one({'_id': lc})
+                    if livestream_category:
+                        new_cat_id = add_livestream_category(wapi, mongo_db, mysql_conn, mysql_cursor, livestream_category)
+                        if new_cat_id:
+                            cat_data.append({'id': new_cat_id})
+            if cat_data:
+                new_livestream['categories'] = cat_data
         livestream_assets = []
         exist_assets_log = get_image_from_log(mongo_id=livestream['preview'], category='livestream')
         if exist_assets_log:
@@ -137,7 +150,7 @@ def delete_livestream_from_db(mysql_conn, mysql_cursor, woo_id):
 def add_livestream_category(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
     exist_cat = get_livestream_category_from_log(mongo_id=mongo_cat['_id'])
     if exist_cat:
-        return
+        return exist_cat.woo_id
     cat_data = {
         'name': mongo_cat['name'],
         'slug': mongo_cat['_id']
@@ -147,3 +160,5 @@ def add_livestream_category(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
         print(cat_data.json()['id'])
         mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'livestream_category'}, 'term_id=%s' % cat_data.json()['id'])
         save_livestream_category_to_log(mongo_cat['_id'], cat_data.json()['id'])
+        return cat_data.json()['id']
+    return None
