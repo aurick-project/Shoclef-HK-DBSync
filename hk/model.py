@@ -162,6 +162,42 @@ def save_livestream_to_log(mongo_id='', woo_id=''):
     new_livestream.save()
 
 
+def get_livestream_category_from_log(mongo_id='', woo_id=''):
+    try:
+        exist_livestream = None
+        if mongo_id != '':
+            exist_livestream = LivestreamCategory.objects.get(mongo_id=mongo_id)
+        if woo_id != '':
+            exist_livestream = LivestreamCategory.objects.get(woo_id=woo_id)
+        return exist_livestream
+    except:
+        print('get livestream Category from log not exist')
+    return None
+
+
+def save_livestream_category_to_log(mongo_id='', woo_id=''):
+    new_livestream = LivestreamCategory(mongo_id=mongo_id, woo_id=woo_id)
+    new_livestream.save()
+
+
+def get_livestream_experience_from_log(mongo_id='', woo_id=''):
+    try:
+        exist_livestream = None
+        if mongo_id != '':
+            exist_livestream = LivestreamExperience.objects.get(mongo_id=mongo_id)
+        if woo_id != '':
+            exist_livestream = LivestreamExperience.objects.get(woo_id=woo_id)
+        return exist_livestream
+    except:
+        print('get livestream Experience from log not exist')
+    return None
+
+
+def save_livestream_experience_to_log(mongo_id='', woo_id=''):
+    new_livestream = LivestreamExperience(mongo_id=mongo_id, woo_id=woo_id)
+    new_livestream.save()
+
+
 def get_missing_assets_from_log(mongo_id=''):
     try:
         if mongo_id != '':

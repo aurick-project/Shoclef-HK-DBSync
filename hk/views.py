@@ -431,8 +431,10 @@ def start_sync_livestreams_category():
     mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
 
     for mlc in mongo_lcs:
-
         print(mlc['name'])
+        exist_cat = get_livestream_category_from_log(mongo_id=mlc['_id'])
+        if exist_cat:
+            continue
         cat_data = {
             'name': mlc['name'],
             'slug': mlc['_id']
@@ -440,6 +442,7 @@ def start_sync_livestreams_category():
         cat_id = woo_category_insert(wapi, cat_data)
         if cat_id and 'id' in cat_id:
             mysql_update_table(mysql_conn, mysql_cursor, 'wp_term_taxonomy', {'taxonomy': 'livestream_category'}, 'term_id=%s' % cat_id)
+            save_livestream_category_to_log(mlc['_id'], cat_id)
 
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('livestreams_category', 0)
@@ -448,6 +451,23 @@ def start_sync_livestreams_category():
 def start_sync_livestreams_category_delete():
     print('start deleting livestream categories')
     print('-' * 30)
+    print('get livestream categories from mongo')
+    wapi = woo_api(woocommerce)
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+    mongo_lcs = mongo_db['livestreamcategories'].find().sort('order', -1)
+    mysql_conn = mysql_db_connect(hk_mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+
+    for mlc in mongo_lcs:
+        exist_cat = get_livestream_category_from_log(mlc['_id'])
+        if exist_cat:
+            mysql_delete_table(mysql_conn,mysql_cursor,'wp_terms','term_id=%s' % exist_cat.woo_id)
+            mysql_delete_table(mysql_conn, mysql_cursor,'wp_term_taxonomy', 'term_id=%s' % woo_id)
+            exist_cat.delete()
+
+    mysql_db_close(mysql_conn, mysql_cursor)
+    save_status('livestreams_category_delete', 0)
 
 
 def start_sync_livestreams_experience():

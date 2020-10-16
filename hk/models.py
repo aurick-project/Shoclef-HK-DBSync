@@ -73,6 +73,24 @@ class Livestream(models.Model):
         return 'woo:%s mongo:%s' % (self.woo_id, self.mongo_id)
 
 
+class LivestreamCategory(models.Model):
+    id = models.AutoField(primary_key=True)
+    woo_id = models.CharField(default='', max_length=100)
+    mongo_id = models.CharField(default='', max_length=100)
+
+    def __str__(self):
+        return 'woo:%s mongo:%s' % (self.woo_id, self.mongo_id)
+
+
+class LivestreamExperience(models.Model):
+    id = models.AutoField(primary_key=True)
+    woo_id = models.CharField(default='', max_length=100)
+    mongo_id = models.CharField(default='', max_length=100)
+
+    def __str__(self):
+        return 'woo:%s mongo:%s' % (self.woo_id, self.mongo_id)
+
+
 class InvalidAssets(models.Model):
     id = models.AutoField(primary_key=True)
     mongo_id = models.CharField(default='', max_length=100)
