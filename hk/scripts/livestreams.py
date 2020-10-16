@@ -139,7 +139,7 @@ def delete_livestream_from_db(mysql_conn, mysql_cursor, woo_id):
     try:
         mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % woo_id)
         mysql_delete_table(mysql_conn, mysql_cursor, 'wp_postmeta', 'post_id=%s' % woo_id)
-        exist_livestream_in_log = get_livestream_from_log(woo_id)
+        exist_livestream_in_log = get_livestream_from_log(woo_id=woo_id)
         if exist_livestream_in_log:
             exist_livestream_in_log.delete()
     except:
