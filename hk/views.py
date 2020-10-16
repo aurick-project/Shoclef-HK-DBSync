@@ -394,7 +394,6 @@ def start_sync_livestreams():
             break
         print('livestream', livestream['_id'])
         add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream)
-        break
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('livestreams', 0)
 
