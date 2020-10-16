@@ -30,13 +30,22 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
             for lc in livestream['categories']:
                 exist_cat = get_livestream_category_from_log(lc)
                 if exist_cat:
+                    print('category added in livestream categories')
                     cat_data.append({'id': exist_cat.woo_id})
                 else:
+                    print('category not added in livestream categories')
                     livestream_category = mongo_db['livestreamcategories'].find_one({'_id': lc})
                     if livestream_category:
+                        print('category found from livestream categories in mongo')
                         new_cat_id = add_livestream_category(wapi, mongo_db, mysql_conn, mysql_cursor, livestream_category)
                         if new_cat_id:
+                            print('category added to livestream categories in woo')
                             cat_data.append({'id': new_cat_id})
+                        else:
+                            print('category not added to livestream categories in woo', new_cat_id)
+                    else:
+                        print('category not exist in mongo', lc)
+
             if cat_data:
                 new_livestream['categories'] = cat_data
         livestream_assets = []
