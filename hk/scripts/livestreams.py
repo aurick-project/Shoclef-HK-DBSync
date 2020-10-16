@@ -1,6 +1,7 @@
 import requests
 from hk.model import *
 from hk.mysql_connect import *
+from hk.settings import mongo
 from hk.scripts.products import add_product
 from hk.woocommerce_connect import *
 
@@ -164,10 +165,23 @@ def add_livestream_category(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
     exist_cat = get_livestream_category_from_log(mongo_id=mongo_cat['_id'])
     if exist_cat:
         return exist_cat.woo_id
+
     cat_data = {
         'name': mongo_cat['name'],
         'slug': mongo_cat['_id']
     }
+    cat_assets = None
+    if 'imagePath' in mongo_cat:
+        try:
+            response = requests.head(mongo['cdn_url'] + mongo_cat['imagePath'])
+            image_formats = ("image/png", "image/jpeg", "image/jpg")
+            if response.headers['content-type'] in image_formats:
+                cat_assets = {'src': mongo['cdn_url'] + mongo_cat['imagePath']}
+
+        except:
+            pass
+    if cat_assets:
+        cat_data['image'] = cat_assets
     cat_data = woo_category_insert(wapi, cat_data)
     if cat_data and 'id' in cat_data.json():
         print(cat_data.json()['id'])
