@@ -118,6 +118,7 @@ def add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream):
                 mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': livestream_user.woo_id}, 'ID=%s' % woo_id)
 
             # update livestream experience and category
+            print('update livestream experience and category')
             if 'categories' in livestream:
                 for lc in livestream['categories']:
                     exist_cat = get_livestream_category_from_log(lc)
