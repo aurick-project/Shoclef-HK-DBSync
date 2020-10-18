@@ -1,6 +1,6 @@
 from python_graphql_client import GraphqlClient
 import asyncio
-
+import json
 # Instantiate the client with an endpoint.
 client = GraphqlClient(endpoint="http://52.59.243.101:4000/graphql")
 
@@ -17,4 +17,4 @@ query = """
 # Asynchronous request
 
 data = asyncio.run(client.execute_async(query=query))
-print(data.json())
+print(json.loads(data))
