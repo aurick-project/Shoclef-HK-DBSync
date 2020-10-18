@@ -17,4 +17,4 @@ query = """
 # Asynchronous request
 
 data = asyncio.run(client.execute_async(query=query))
-print(json.loads(data))
+print(data['data']['generateAccessToken'])
