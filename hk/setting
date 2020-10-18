@@ -1,0 +1,30 @@
+
+woocommerce = {
+    'url':      'http://localhost/mundofert/',
+    'api_ck':   'ck_7d47c726f869fce4f79eb330637eef5d89477b47',
+    'api_cs':   'cs_4009db2ca710e229e79e2cb2ad66528485c50afe',
+    'user_url': 'wp-json/wp/v2/users',
+    'post_url': 'wp-json/wp/v2/posts',
+    'auth':     'bWFuYWdlbWVudDpCYXR0YWdsaXR0aTIw',
+}
+
+mongo = {
+    'url':    'mongodb://127.0.0.1:27017',
+    'dbname': 'api',
+    'cdn_url': 'https://cdn-stage.shoclef.com'
+}
+
+hk_mysql = {
+    'host':     'localhost',
+    'port':     '3306',
+    'username': 'root',
+    'password': '',
+    'dbname':   'mundofert',
+    'logname':  'sync_log',
+}
+
+fixed_products = []
+
+fix_products = []
+
+have_to_fix_products = []
