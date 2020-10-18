@@ -14,12 +14,7 @@ query = """
     }
 """
 
-# # Synchronous request
-# data = client.execute(query=query, variables=variables)
-# print(data)  # => {'data': {'country': {'code': 'CA', 'name': 'Canada'}}}
-#
-
 # Asynchronous request
 
 data = asyncio.run(client.execute_async(query=query))
-print(data)  # => {'data': {'country': {'code': 'CA', 'name': 'Canada'}}}
+print(data)
