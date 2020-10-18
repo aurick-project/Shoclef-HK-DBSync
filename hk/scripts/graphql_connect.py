@@ -6,11 +6,11 @@ client = GraphqlClient(endpoint="http://52.59.243.101:4000/graphql")
 
 # Create the query string and variables required for the request.
 query = """
-    query GetProduct{
-        product(id:"fff00a1e-f7b1-40ac-ac62-1fe2924bd149"){
-            title
-            description
-        }
+    mutation {
+        generateAccessToken(data: {
+            email: "shipping32@shoclef.com",
+            password: "Shoclef123"
+        })
     }
 """
 
