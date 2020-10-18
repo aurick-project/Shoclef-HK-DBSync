@@ -1,20 +1,30 @@
 from python_graphql_client import GraphqlClient
+from hk.settings import hk_graphql
 import asyncio
 import json
-# Instantiate the client with an endpoint.
-client = GraphqlClient(endpoint="http://52.59.243.101:4000/graphql")
 
-# Create the query string and variables required for the request.
-query = """
-    mutation {
-        generateAccessToken(data: {
-            email: "shipping32@shoclef.com",
-            password: "Shoclef123"
-        })
-    }
-"""
 
-# Asynchronous request
+class GraphqlConnect:
+    client = None
+    query = ''
+    token = ''
 
-data = asyncio.run(client.execute_async(query=query))
-print(data['data']['generateAccessToken'])
+    def __init__(self):
+        self.client = GraphqlClient(endpoint=hk_graphql['host'])
+
+    def generate_token(self):
+        if self.client:
+            self.query = """
+                mutation {
+                    generateAccessToken(data: {
+                        email: "{}",
+                        password: "{}"
+                    })
+                }
+            """.format(hk_graphql['user_email'], hk_graphql['user_password'])
+
+            print('run generateAccessToken mutation')
+            res = asyncio.run(self.client.execute_async(query=self.query))
+            if 'data' in res and 'generateAcessToken' in res['data']:
+                self.token = res['data']['generateAcessToken']
+                print(self.token)
