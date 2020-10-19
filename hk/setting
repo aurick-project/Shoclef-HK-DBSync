@@ -23,6 +23,12 @@ hk_mysql = {
     'logname':  'sync_log',
 }
 
+hk_graphql = {
+    'host': 'http://localhost/graphql',
+    'user_email': "admin@admin.com",
+    'user_password': "admin123"
+}
+
 fixed_products = []
 
 fix_products = []

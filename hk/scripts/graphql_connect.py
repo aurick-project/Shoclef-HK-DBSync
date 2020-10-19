@@ -27,4 +27,10 @@ class GraphqlConnect:
             res = asyncio.run(self.client.execute_async(query=self.query))
             if 'data' in res and 'generateAcessToken' in res['data']:
                 self.token = res['data']['generateAcessToken']
-                print(self.token)
+                print("token: " + self.token)
+
+    def run_query(self, query):
+        res = None
+        if self.client and query:
+            res = asyncio.run(self.client.execute_async(query=query))
+        return res

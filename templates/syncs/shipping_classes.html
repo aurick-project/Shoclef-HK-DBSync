@@ -1,0 +1,27 @@
+<tr>
+    <td><a href="{% if current_state != 'shipping' %}{% url 'Set Status' 'shipping' 1 %}{% else %}#{% endif %}"
+           class="btn btn-primary {% if current_state != '' and current_state != 'shipping' %}disabled{% endif %}">
+        {% if current_state == 'shipping' %}
+            <i class="fas fa-circle-notch fa-spin"></i> {% endif %}Sync Shipping Classes</a></td>
+    <td><a href="{% if current_state == 'shipping' %}{% url 'Set Status' 'shipping' 0 %}{% else %}#{% endif %}"
+           class="btn btn-danger {% if current_state != '' and current_state != 'shipping' %}disabled{% endif %}">Stop</a></td>
+    <td><a href="{% if current_state != 'shipping_delete' %}{% url 'Set Status' 'shipping_delete' 1 %}{% else %}#{% endif %}"
+           class="btn btn-info {% if current_state != '' and current_state != 'shipping_delete' %}disabled{% endif %}">
+        {% if current_state == 'shipping_delete' %}<i class="fas fa-circle-notch fa-spin"></i> {% endif %}Delete  Shipping Classes</a></td>
+    <td><a href="{% if current_state == 'shipping_delete' %}{% url 'Set Status' 'shipping_delete' 0 %}{% else %}#{% endif %}"
+           class="btn btn-danger {% if current_state != '' and current_state != 'shipping_delete' %}disabled{% endif %}">Stop</a></td>
+</tr>
+<tr>
+    <td>
+        <hr>
+    </td>
+    <td>
+        <hr>
+    </td>
+    <td>
+        <hr>
+    </td>
+    <td>
+        <hr>
+    </td>
+</tr>

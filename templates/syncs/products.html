@@ -1,3 +1,4 @@
+
 <tr>
     <td><a href="{% if current_state != 'products' %}{% url 'Set Status' 'products' 1 %}{% else %}#{% endif %}"
            class="btn btn-primary {% if current_state != '' and current_state != 'products' %}disabled{% endif %}">{% if current_state == 'products' %}

@@ -185,6 +185,10 @@ def start_sync(request, title):
         start_sync_payments()
     elif title == 'payments_delete':
         start_sync_payments_delete()
+    elif title == 'shipping':
+        start_sync_shipping_classes()
+    elif title == 'shipping_delete':
+        start_sync_shipping_classes_delete()
     return HttpResponse('Hello')
 
 
@@ -572,3 +576,18 @@ def start_sync_payments_delete():
         pprint(user)
 
     save_status('payments_delete', 0)
+
+
+def start_sync_shipping_classes():
+    print('start syncing shipping classes')
+    print('-' * 30)
+    print('get custom carriers from mongo')
+    wapi = woo_api(woocommerce)
+    mapi = mongo_connect(mongo['url'])
+    mongo_db = mapi[mongo['dbname']]
+
+    custom_carriers = mongo_db['customcarriers'].find()
+    for cc in custom_carriers:
+        pprint(cc)
+
+    save_status('shipping', 0)
