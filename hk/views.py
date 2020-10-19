@@ -12,6 +12,7 @@ from hk.scripts.users import *
 from hk.scripts.livestreams import *
 from hk.scripts.orders import *
 from hk.scripts.payments import *
+from hk.scripts.shipping_classes import *
 
 
 # Create your views here.
@@ -588,7 +589,11 @@ def start_sync_shipping_classes():
 
     custom_carriers = mongo_db['customcarriers'].find()
     for cc in custom_carriers:
-        add_shipping_class_too_woo(wapi, mapi, cc)
-        pprint(cc)
+        sync_statues = get_status('shipping')
+        if sync_statues.state == 0:
+            print('-' * 30)
+            print('1 Break syncing...')
+            break
+        add_shipping_class_to_woo(wapi, mapi, cc)
 
     save_status('shipping', 0)

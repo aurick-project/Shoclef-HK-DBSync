@@ -198,11 +198,6 @@ def save_livestream_experience_to_log(mongo_id='', woo_id=''):
     new_livestream.save()
 
 
-def save_resource_to_log(mongo_id='', woo_id='', category='product'):
-    new_resource = Resources(mongo_id=mongo_id, woo_id=woo_id, category=category)
-    new_resource.save()
-
-
 def get_missing_assets_from_log(mongo_id=''):
     try:
         if mongo_id != '':
@@ -215,13 +210,20 @@ def get_missing_assets_from_log(mongo_id=''):
     return None
 
 
-def get_resourece_from_log(mongo_id='', woo_id='', category='product'):
+def get_resourece_from_log(mongo_id='', woo_id='', slug='', category='product'):
+    resource = None
     try:
         if mongo_id != '':
             resource = Resources.objects.get(mongo_id=mongo_id, category=category)
         if woo_id != '':
             resource = Resources.objects.get(woo_id=woo_id, category=category)
-        return resource
+        if slug != '':
+            resource = Resources.objects.get(slug=slug, category=category)
     except:
-        print('get invalid Resource from log failed', mongo_id)
-    return None
+        print('get Resource from log failed', mongo_id)
+    return resource
+
+
+def save_resource_to_log(mongo_id='', woo_id='', slug='', category='product'):
+    new_resource = Resources(mongo_id=mongo_id, woo_id=woo_id, slug=slug, category=category)
+    new_resource.save()
