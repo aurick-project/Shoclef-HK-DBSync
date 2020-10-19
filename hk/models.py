@@ -99,3 +99,13 @@ class InvalidAssets(models.Model):
 
     def __str__(self):
         return 'mongo:%s' % self.mongo_id
+
+
+class Resources(models.Model):
+    id = models.AutoField(primary_key=True)
+    mongo_id = models.CharField(default='', max_length=100)
+    woo_id = models.IntegerField(default=0)
+    category = models.CharField(default='product', max_length=100)
+
+    def __str__(self):
+        return '%s %s %s' % (self.category, self.mongo_id, self.woo_id)

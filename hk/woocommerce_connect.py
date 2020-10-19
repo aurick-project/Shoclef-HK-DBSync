@@ -179,3 +179,14 @@ def woo_user_insert(data):
     except Exception as e:
         print(e)
     return None
+
+
+# add shipping class
+def shipping_add(wapi, shipping_data):
+    try:
+        r = wapi.post('products/shipping_classes', shipping_data)
+        if r.json():
+            return r.json()
+    except Exception as e:
+        print(e)
+    return None

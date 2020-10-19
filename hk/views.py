@@ -588,6 +588,7 @@ def start_sync_shipping_classes():
 
     custom_carriers = mongo_db['customcarriers'].find()
     for cc in custom_carriers:
+        add_shipping_class_too_woo(wapi, mapi, cc)
         pprint(cc)
 
     save_status('shipping', 0)
