@@ -136,7 +136,7 @@ def check_products(request, stop):
                         continue
                 else:
                     print('|  not exist')
-                    invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
+                    invalid_asset_to_log = InvalidAssets(mongo_id=mp_assets, parent=mp['_id'], category='product')
                     invalid_asset_to_log.save()
                     continue
                 print('|  valid')
