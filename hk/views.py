@@ -116,14 +116,14 @@ def check_products(request):
 
     for mp in m_products:
         prod_cnt += 1
-        print("product %s/%s -- %s" % (prod_cnt, len(m_products), mp['_id']))
+        print("product %s/%s -- %s" % (prod_cnt, m_products.count, mp['_id']))
         missing_assets_for_one = []
         mp_assets = mp['assets']
         asset_cnt = 0
         if mp_assets:
             for mp_asset in mp_assets:
                 asset_cnt += 1
-                print('|----asset %s/%s' % (asset_cnt, len(mp_assets)))
+                print('|----asset %s/%s' % (asset_cnt, mp_assets.count))
                 ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
                     response = requests.head(ma['url'])
