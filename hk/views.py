@@ -123,7 +123,7 @@ def check_products(request):
         if mp_assets:
             for mp_asset in mp_assets:
                 asset_cnt += 1
-                print('|----asset %s/%s' % (asset_cnt, mp_assets.count()))
+                print('|----asset %s/%s' % (asset_cnt, len(mp_assets)))
                 ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
                     response = requests.head(ma['url'])
