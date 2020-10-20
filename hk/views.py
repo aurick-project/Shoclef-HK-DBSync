@@ -42,7 +42,7 @@ def index(request):
     return render(request, 'index.html', content)
 
 
-def check_products(request):
+def check_products(request, stop):
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
     m_products = mongo_db['products'].find()
@@ -115,6 +115,8 @@ def check_products(request):
     prod_cnt = 0
 
     for mp in m_products:
+        if stop == 1:
+            break
         prod_cnt += 1
         print("product %s/%s -- %s" % (prod_cnt, m_products.count(), mp['_id']))
         missing_assets_for_one = []
