@@ -128,13 +128,17 @@ def check_products(request):
                 if ma:
                     response = requests.head(ma['url'])
                     if response.headers['content-type'] not in image_formats:
-                        print('|--------invalid')
+                        print('    |----invalid')
                         invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
                         invalid_asset_to_log.save()
+                        continue
                 else:
-                    print('|--------not exist')
+                    print('    |----not exist')
                     invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
                     invalid_asset_to_log.save()
+                    continue
+                print('    |----valid')
+
         if mp['_id'] in duplicated_ids:
             continue
         same_prod = mongo_db['products'].find({'title': mp['title'], 'price': mp['price']})
