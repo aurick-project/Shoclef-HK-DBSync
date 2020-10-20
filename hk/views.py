@@ -113,20 +113,26 @@ def check_products(request):
     duplicated_ids = []
     image_formats = ("image/png", "image/jpeg", "image/jpg")
     prod_cnt = 0
+
     for mp in m_products:
         prod_cnt += 1
-        print(prod_cnt, mp['_id'])
+        print("product %s/%s -- %s" % (prod_cnt, len(m_products), mp['_id']))
         missing_assets_for_one = []
         mp_assets = mp['assets']
+        asset_cnt = 0
         if mp_assets:
             for mp_asset in mp_assets:
+                asset_cnt += 1
+                print('----asset %s/%s' % (asset_cnt, len(mp_assets)))
                 ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
                     response = requests.head(ma['url'])
                     if response.headers['content-type'] not in image_formats:
+                        print('--------invalid')
                         invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
                         invalid_asset_to_log.save()
                 else:
+                    print('--------not exist')
                     invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
                     invalid_asset_to_log.save()
         if mp['_id'] in duplicated_ids:
