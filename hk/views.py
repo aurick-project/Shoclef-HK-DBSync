@@ -128,12 +128,15 @@ def check_products(request, stop):
                 asset_cnt += 1
                 ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
-                    response = requests.get(ma['url'])
-                    if response.status_code != 200:
-                        # print('|----asset %s/%s -- %s | OK' % (asset_cnt, assets_count, mp_asset))
-                        print('|----asset %s/%s -- %s | invalid' % (asset_cnt, assets_count, mp_asset))
-                        invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
-                        invalid_asset_to_log.save()
+                    try:
+                        response = requests.get(ma['url'])
+                        if response.status_code != 200:
+                            # print('|----asset %s/%s -- %s | OK' % (asset_cnt, assets_count, mp_asset))
+                            print('|----asset %s/%s -- %s | invalid' % (asset_cnt, assets_count, mp_asset))
+                            invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
+                            invalid_asset_to_log.save()
+                    except Exception as e:
+                        print(e)
                 else:
                     print('|----asset %s/%s -- %s | Not exist' % (asset_cnt, assets_count, mp_asset))
                     invalid_asset_to_log = InvalidAssets(mongo_id=mp_asset, parent=mp['_id'], category='product')
