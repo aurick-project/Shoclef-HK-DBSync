@@ -113,33 +113,31 @@ def check_products(request, stop):
     duplicated_ids = []
     image_formats = ("image/png", "image/jpeg", "image/jpg")
     prod_cnt = 0
-
+    total_prod_cnt = m_products.count()
     for mp in m_products:
         if stop == 1:
             break
         prod_cnt += 1
-        print("product %s/%s -- %s" % (prod_cnt, m_products.count(), mp['_id']))
+        print("product %s/%s -- %s" % (prod_cnt, total_prod_cnt, mp['_id']))
         missing_assets_for_one = []
         mp_assets = mp['assets']
         asset_cnt = 0
+        assets_count = len(mp_assets)
         if mp_assets:
             for mp_asset in mp_assets:
                 asset_cnt += 1
-                print('|----asset %s/%s -- %s' % (asset_cnt, len(mp_assets), mp_asset), end=' ')
                 ma = mongo_db['assets'].find_one({'_id': mp_asset})
                 if ma:
-                    response = requests.head(ma['url'])
-                    if response.headers['content-type'] not in image_formats:
-                        print('|  invalid')
+                    response = requests.get(ma['url'])
+                    if response.status_code != 200:
+                        # print('|----asset %s/%s -- %s | OK' % (asset_cnt, assets_count, mp_asset))
+                        print('|----asset %s/%s -- %s | invalid' % (asset_cnt, assets_count, mp_asset))
                         invalid_asset_to_log = InvalidAssets(mongo_id=ma['_id'], parent=mp['_id'], category='product')
                         invalid_asset_to_log.save()
-                        continue
                 else:
-                    print('|  not exist')
+                    print('|----asset %s/%s -- %s | Not exist' % (asset_cnt, assets_count, mp_asset))
                     invalid_asset_to_log = InvalidAssets(mongo_id=mp_asset, parent=mp['_id'], category='product')
                     invalid_asset_to_log.save()
-                    continue
-                print('|  valid')
 
         if mp['_id'] in duplicated_ids:
             continue
