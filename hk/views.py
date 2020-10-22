@@ -223,8 +223,8 @@ def start_sync(request, title):
         start_sync_payments_delete()
     elif title == 'shipping':
         start_sync_shipping_classes()
-    elif title == 'shipping_delete':
-        start_sync_shipping_classes_delete()
+    # elif title == 'shipping_delete':
+        # start_sync_shipping_classes_delete()
     return HttpResponse('Hello')
 
 
