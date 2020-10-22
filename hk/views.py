@@ -167,6 +167,15 @@ def check_products(request, stop):
     #     for ia in invalid_assets:
     #         writer.writerow({'product_id': ia.parent, 'asset_id': ia.mongo_id, 'status': ia.status})
 
+    # get duplicated products from log
+    dup_products = get_missing_assets_from_log()
+    with open('uploads/duplicated_products-api-test2-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=['origin', 'same'])
+        writer.writeheader()
+        for ia in dup_products:
+            if ia.status == 'duplicate':
+                writer.writerow({'origin': ia.parent, 'same': ia.mongo_id})
+
     return HttpResponse('OK')
 
 
