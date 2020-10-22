@@ -164,7 +164,7 @@ def check_products(request, stop):
         writer = csv.DictWriter(csvfile, fieldnames=['product_id', 'asset_id'])
         writer.writeheader()
         for ia in invalid_assets:
-            writer.writerow({'product_id': ia.mongo_id, 'asset_id': ia.parent})
+            writer.writerow({'product_id': ia.parent, 'asset_id': ia.mongo_id})
 
     return HttpResponse('OK')
 
