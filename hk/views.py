@@ -114,9 +114,9 @@ def check_products(request, stop):
                                 mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
         else:
             mongo_db['products'].delete_one({'_id': ma.mongo_id})
-    duplicated = {}
-    duplicated_ids = []
-    image_formats = ("image/png", "image/jpeg", "image/jpg")
+    # duplicated = {}
+    # duplicated_ids = []
+    # image_formats = ("image/png", "image/jpeg", "image/jpg")
     # prod_cnt = skip_count
     # total_prod_cnt = m_products.count(True) + skip_count
     # for mp in m_products:
@@ -124,7 +124,7 @@ def check_products(request, stop):
     #         break
     #     prod_cnt += 1
     #     print("product %s/%s -- %s" % (prod_cnt, total_prod_cnt, mp['_id']))
-        missing_assets_for_one = []
+    #     missing_assets_for_one = []
         # mp_assets = mp['assets']
         # asset_cnt = 0
         # assets_count = len(mp_assets)
@@ -157,7 +157,7 @@ def check_products(request, stop):
         #         if sp['_id'] != mp['_id']:
         #             duplicated[mp['_id']].append(sp['_id'])
         #             new_invalid = InvalidAssets(mongo_id=sp['_id'], parent=mp['_id'], status='duplicate', category='product')
-    print('-' * 50)
+    # print('-' * 50)
     # print('duplicated')
     # pprint(duplicated)
 
@@ -177,7 +177,6 @@ def check_products(request, stop):
     #     for ia in dup_products:
     #         if ia.status == 'duplicate':
     #             writer.writerow({'origin': ia.parent, 'same': ia.mongo_id})
-
     return HttpResponse('OK')
 
 
