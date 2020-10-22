@@ -79,6 +79,7 @@ def check_products(request, stop):
     print('delete missing assets registered on log')
     missing_assets_log = get_missing_assets_from_log()
     for ma in missing_assets_log:
+        print(ma.status)
         if ma.status == 'invalid':
             print('-' * 50)
             print('delete from assets', ma.mongo_id)
@@ -112,8 +113,10 @@ def check_products(request, stop):
                                 print('update product assets without invalid asset', m_product['_id'], ma.mongo_id)
                                 update_query = {'_id': m_product['_id']}
                                 mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
-        else:
+        elif ma.status == 'duplicate':
             mongo_db['products'].delete_one({'_id': ma.mongo_id})
+
+    m_products = mongo_db['products'].find()
     duplicated = {}
     duplicated_ids = []
     image_formats = ("image/png", "image/jpeg", "image/jpg")
