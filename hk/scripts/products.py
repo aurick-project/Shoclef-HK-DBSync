@@ -94,7 +94,7 @@ def add_product(mapi, wapi, mongo_product, cc_rate):
                             })
                         else:
                             print('invalid image', response.headers['content-type'])
-                            invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'], parent=mongo_product['_id'], status='invalid', category='product')
+                            invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'], parent=mongo_product['_id'], status='Invalid', category='product')
                             invalid_asset_to_log.save()
                     else:
                         invalid_asset_to_log = InvalidAssets(mongo_id=mongo_asset['_id'], parent=mongo_product['_id'], status='missing', category='product')

@@ -80,7 +80,7 @@ def check_products(request, stop):
     missing_assets_log = get_missing_assets_from_log()
     for ma in missing_assets_log:
         print(ma.status)
-        if ma.status == 'invalid':
+        if ma.status == 'Invalid' or ma.status == 'missing':
             print('-' * 50)
             print('delete from assets', ma.mongo_id)
             delete_query = {'_id': ma.mongo_id}
