@@ -114,6 +114,7 @@ def check_products(request, stop):
                                 update_query = {'_id': m_product['_id']}
                                 mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
         elif ma.status == 'duplicate':
+            print('delete duplicated product')
             mongo_db['products'].delete_one({'_id': ma.mongo_id})
 
     m_products = mongo_db['products'].find()
