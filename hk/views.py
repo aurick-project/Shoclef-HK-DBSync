@@ -1,3 +1,5 @@
+import csv
+
 import json
 from pprint import pprint
 from django.http import HttpResponse
@@ -45,7 +47,7 @@ def index(request):
 def check_products(request, stop):
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
-    m_products = mongo_db['products'].find()
+    m_products = mongo_db['products'].find().skip(11017)
     wapi = woo_api(woocommerce)
     print('-' * 50)
     # print('delete products without images')
@@ -267,7 +269,7 @@ def start_sync_products():
 
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
-    m_products = mongo_db['products'].find()
+    m_products = mongo_db['products'].find().limit(10)
 
     for mp in m_products:
         sync_statues = get_status('products')
@@ -313,6 +315,74 @@ def start_sync_products():
             print('product insert success %s' % woo_prod_id)
         else:
             print('product insert failed')
+
+    # sync woo to mongo
+    woo_prods = woo_products(wapi, 1, 100)
+    csv_values = []
+    for wp in woo_prods:
+        exist_woo = get_product_from_log(woo_id=wp['id'])
+        if exist_woo:
+            print('product exist in woo & mongo')
+            continue
+        prod_data = {
+            '_id':                '',
+            'username':           'Designer Creations',
+            'email':              'shoclef.outnet@shoclef.com',
+            'freeDeliveryTo':     'DOMESTIC',
+            'isDeleted':          'FALSE',
+            'title':              wp['name'],
+            'description':        wp['description'],
+            'currency':           'USD',
+            'categoryID':         '',
+            'weightValue':        wp['weight'],
+            'weightUnit':         'oz',
+            'shippingBoxWidth':   '0',
+            'shippingBoxHeight':  '0',
+            'shippingBoxLength':  '0',
+            'unit':               'inch',
+            'brand_name':         '',
+            'seller_name':        'management',
+            'price':              wp['sale_price'] if wp['sale_price'] else 0,
+            'oldPrice':           wp['regular_price'] if wp['regular_price'] else 0,
+            'quantity':           wp['stock_quantity'] if wp['stock_quantity'] else 0,
+            'customCarrier':      '',
+            'customCarrierValue': '',
+            'colors':             '',
+            'sizes':              '',
+            'variationPrices':    '',
+            'variationOldPrices': '',
+        }
+        if wp['categories']:
+            prod_data['categoryID'] = wp['categories'][0]['slug']
+
+        if wp['tags']:
+            prod_data['brand_name'] = wp['tags'][0]['name']
+
+        if wp['dimensions']:
+            prod_data['shippingBoxWidth'] = wp['dimensions']['width']
+            prod_data['shippingBoxHeight'] = wp['dimensions']['height']
+            prod_data['shippingBoxLength'] = wp['dimensions']['length']
+
+        wp_images = wp['images']
+        wpi = 0
+        for wp_image in wp_images:
+            wpi += 1
+            prod_data['assets%d' % wpi] = wp_image['src']
+        for empty_image in range(wpi + 1, 15):
+            prod_data['assets%d' % empty_image] = ''
+        csv_values.append(prod_data)
+
+    csv_fields = ['_id', 'username', 'email', 'assets1', 'assets2', 'assets3', 'assets4', 'assets5', 'assets6', 'assets7', 'assets8', 'assets9', 'assets10', 'assets11', 'assets12',
+                  'assets13', 'assets14', 'freeDeliveryTo', 'isDeleted', 'title', 'description', 'currency', 'categoryID', 'weightValue', 'weightUnit', 'shippingBoxWidth',
+                  'shippingBoxHeight', 'shippingBoxLength', 'unit', 'brand_name', 'seller_name', 'price', 'oldPrice', 'quantity', 'customCarrier', 'customCarrierValue', 'colors',
+                  'sizes', 'variationPrices', 'variationOldPrices', ]
+
+    with open('uploads/products-shoclef.hk-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=csv_fields)
+        writer.writeheader()
+        for csv_value in csv_values:
+            writer.writerow(csv_value)
+
     save_status('products', 0)
 
 
