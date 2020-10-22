@@ -116,7 +116,7 @@ def check_products(request, stop):
     duplicated_ids = []
     image_formats = ("image/png", "image/jpeg", "image/jpg")
     prod_cnt = skip_count
-    total_prod_cnt = m_products.count() + skip_count
+    total_prod_cnt = m_products.count()
     for mp in m_products:
         if stop == 1:
             break
