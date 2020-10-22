@@ -112,17 +112,17 @@ def check_products(request, stop):
     #                         update_query = {'_id': m_product['_id']}
     #                         mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
 
-    # duplicated = {}
-    # duplicated_ids = []
-    # image_formats = ("image/png", "image/jpeg", "image/jpg")
-    # prod_cnt = skip_count
-    # total_prod_cnt = m_products.count(True) + skip_count
-    # for mp in m_products:
-    #     if stop == 1:
-    #         break
-    #     prod_cnt += 1
-    #     print("product %s/%s -- %s" % (prod_cnt, total_prod_cnt, mp['_id']))
-    #     missing_assets_for_one = []
+    duplicated = {}
+    duplicated_ids = []
+    image_formats = ("image/png", "image/jpeg", "image/jpg")
+    prod_cnt = skip_count
+    total_prod_cnt = m_products.count(True) + skip_count
+    for mp in m_products:
+        if stop == 1:
+            break
+        prod_cnt += 1
+        print("product %s/%s -- %s" % (prod_cnt, total_prod_cnt, mp['_id']))
+        missing_assets_for_one = []
         # mp_assets = mp['assets']
         # asset_cnt = 0
         # assets_count = len(mp_assets)
@@ -145,16 +145,16 @@ def check_products(request, stop):
         #             invalid_asset_to_log = InvalidAssets(mongo_id=mp_asset, parent=mp['_id'], category='product')
         #             invalid_asset_to_log.save()
 
-        # if mp['_id'] in duplicated_ids:
-        #     continue
-        # same_prod = mongo_db['products'].find({'title': mp['title'], 'price': mp['price']})
-        # if same_prod.count() > 1:
-        #     duplicated[mp['_id']] = []
-        #     for sp in same_prod:
-        #         duplicated_ids.append(sp['_id'])
-        #         if sp['_id'] != mp['_id']:
-        #             duplicated[mp['_id']].append(sp['_id'])
-        #             new_invalid = InvalidAssets(mongo_id=sp['_id'], parent=mp['_id'], status='duplicate', category='product')
+        if mp['_id'] in duplicated_ids:
+            continue
+        same_prod = mongo_db['products'].find({'title': mp['title'], 'price': mp['price']})
+        if same_prod.count() > 1:
+            duplicated[mp['_id']] = []
+            for sp in same_prod:
+                duplicated_ids.append(sp['_id'])
+                if sp['_id'] != mp['_id']:
+                    duplicated[mp['_id']].append(sp['_id'])
+                    new_invalid = InvalidAssets(mongo_id=sp['_id'], parent=mp['_id'], status='duplicate', category='product')
     print('-' * 50)
     # print('duplicated')
     # pprint(duplicated)
