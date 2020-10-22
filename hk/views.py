@@ -47,7 +47,8 @@ def index(request):
 def check_products(request, stop):
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
-    m_products = mongo_db['products'].find().skip(11017)
+    skip_count = 11017
+    m_products = mongo_db['products'].find().skip(skip_count)
     wapi = woo_api(woocommerce)
     print('-' * 50)
     # print('delete products without images')
@@ -114,8 +115,8 @@ def check_products(request, stop):
     duplicated = {}
     duplicated_ids = []
     image_formats = ("image/png", "image/jpeg", "image/jpg")
-    prod_cnt = 0
-    total_prod_cnt = m_products.count()
+    prod_cnt = skip_count
+    total_prod_cnt = m_products.count() + skip_count
     for mp in m_products:
         if stop == 1:
             break
