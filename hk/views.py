@@ -47,7 +47,7 @@ def index(request):
 def check_products(request, stop):
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
-    skip_count = 11017
+    skip_count = 12165
     m_products = mongo_db['products'].find().skip(skip_count)
     wapi = woo_api(woocommerce)
     print('-' * 50)
