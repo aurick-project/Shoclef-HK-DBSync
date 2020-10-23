@@ -75,49 +75,49 @@ def check_products(request, stop):
     # mysql_db_close(mysql_conn, mysql_cursor)
     # return HttpResponse('OK')
     #
-    print('-' * 50)
-    print('delete missing assets registered on log')
-    missing_assets_log = get_missing_assets_from_log()
-    for ma in missing_assets_log:
-        print(ma.status)
-        if ma.status == 'Invalid' or ma.status == 'missing':
-            print('-' * 50)
-            print('delete from assets', ma.mongo_id)
-            delete_query = {'_id': ma.mongo_id}
-            if mongo_db['assets'].find_one(delete_query):
-                mongo_db['assets'].delete_one(delete_query)
-                print('asset deleted from mongo db', ma.mongo_id)
-            else:
-                print('asset is not available in mongo db', ma.mongo_id)
-            print('delete from products')
-            if ma.category == 'product':
-                if ma.parent != '':
-                    m_product = mongo_db['products'].find_one({'_id': ma.parent})
-                    if m_product:
-                        if m_product['assets']:
-                            m_product_asset_new = []
-                            for product_asset in m_product['assets']:
-                                if product_asset != ma.mongo_id:
-                                    m_product_asset_new.append(product_asset)
-                            print('update product assets without invalid asset', m_product['_id'], ma.mongo_id)
-                            update_query = {'_id': m_product['_id']}
-                            mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
-                else:
-                    for m_product in m_products:
-                        if m_product['assets']:
-                            m_product_asset_new = []
-                            if ma.mongo_id in m_product['assets']:
-                                for product_asset in m_product['assets']:
-                                    if product_asset != ma.mongo_id:
-                                        m_product_asset_new.append(product_asset)
-                                print('update product assets without invalid asset', m_product['_id'], ma.mongo_id)
-                                update_query = {'_id': m_product['_id']}
-                                mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
-        elif ma.status == 'duplicate':
-            print('delete duplicated product')
-            mongo_db['products'].delete_one({'_id': ma.mongo_id})
+    # print('-' * 50)
+    # print('delete missing assets registered on log')
+    # missing_assets_log = get_missing_assets_from_log()
+    # for ma in missing_assets_log:
+    #     print(ma.status)
+    #     if ma.status == 'Invalid' or ma.status == 'missing':
+    #         print('-' * 50)
+    #         print('delete from assets', ma.mongo_id)
+    #         delete_query = {'_id': ma.mongo_id}
+    #         if mongo_db['assets'].find_one(delete_query):
+    #             mongo_db['assets'].delete_one(delete_query)s
+    #             print('asset deleted from mongo db', ma.mongo_id)
+    #         else:
+    #             print('asset is not available in mongo db', ma.mongo_id)
+    #         print('delete from products')
+    #         if ma.category == 'product':
+    #             if ma.parent != '':
+    #                 m_product = mongo_db['products'].find_one({'_id': ma.parent})
+    #                 if m_product:
+    #                     if m_product['assets']:
+    #                         m_product_asset_new = []
+    #                         for product_asset in m_product['assets']:
+    #                             if product_asset != ma.mongo_id:
+    #                                 m_product_asset_new.append(product_asset)
+    #                         print('update product assets without invalid asset', m_product['_id'], ma.mongo_id)
+    #                         update_query = {'_id': m_product['_id']}
+    #                         mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
+    #             else:
+    #                 for m_product in m_products:
+    #                     if m_product['assets']:
+    #                         m_product_asset_new = []
+    #                         if ma.mongo_id in m_product['assets']:
+    #                             for product_asset in m_product['assets']:
+    #                                 if product_asset != ma.mongo_id:
+    #                                     m_product_asset_new.append(product_asset)
+    #                             print('update product assets without invalid asset', m_product['_id'], ma.mongo_id)
+    #                             update_query = {'_id': m_product['_id']}
+    #                             mongo_db['products'].update_one(update_query, {'$set': {'assets': m_product_asset_new}})
+    #     elif ma.status == 'duplicate':
+    #         print('delete duplicated product')
+    #         mongo_db['products'].delete_one({'_id': ma.mongo_id})
 
-    m_products = mongo_db['products'].find()
+    # m_products = mongo_db['products'].find()
     duplicated = {}
     duplicated_ids = []
     image_formats = ("image/png", "image/jpeg", "image/jpg")
@@ -130,7 +130,7 @@ def check_products(request, stop):
         print("product %s/%s -- %s" % (prod_cnt, total_prod_cnt, mp['_id']))
         if not mp['assets']:
             print('|---delete product have no assets')
-            mongo_db['product'].delete_one({'_id': mp['_id']})
+            mongo_db['products'].delete_one({'_id': mp['_id']})
     #     missing_assets_for_one = []
     # mp_assets = mp['assets']
     # asset_cnt = 0
