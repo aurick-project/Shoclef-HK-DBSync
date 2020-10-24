@@ -24,7 +24,7 @@ def woo_products(wcapi, page=1, per_page=100):
     try:
         print('get product page: %s per_page: %s' % (page, per_page))
         products = wcapi.get('products', params={'page': page, 'per_page': per_page})
-        print(products.content)
+        print(products.text)
         if products:
             return products.json()
     except Exception as e:
