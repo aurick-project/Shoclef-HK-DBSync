@@ -347,7 +347,7 @@ def start_sync_products():
     page = 1
     csv_values = []
     while True:
-        woo_prods = woo_products(wapi, page, 100)
+        woo_prods = woo_products(wapi, page, 10)
         page += 1
         if woo_prods:
             for wp in woo_prods:
