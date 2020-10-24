@@ -396,7 +396,7 @@ def start_sync_products():
                 prod_variations = []
                 if wp['variations']:
                     for wa in wp['variations']:
-                        variation = woo_variation(wapi, wp['_id'], wa)
+                        variation = woo_variation(wapi, wp['id'], wa)
                         prod_variations.append(variation)
                 pprint(prod_variations)
                 wp_images = wp['images']
