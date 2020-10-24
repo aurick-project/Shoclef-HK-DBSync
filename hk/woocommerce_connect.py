@@ -7,6 +7,23 @@ from hk.model import *
 
 def woo_api(config):
     try:
+        from urllib.parse import urlencode
+
+        store_url = 'https://shoclef.com'
+        endpoint = '/wc-auth/v1/authorize'
+        params = {
+            "app_name":     "dbsync1",
+            "scope":        "read_write",
+            "user_id":      2,
+            "return_url":   "https://shoclef.com/return-page",
+            "callback_url": "https://shoclef.com/callback-endpoint"
+        }
+        query_string = urlencode(params)
+
+        print("%s%s?%s" % (store_url, endpoint, query_string))
+        response = requests.post("%s%s?%s" % (store_url, endpoint, query_string))
+        print(response.text)
+
         wcapi = API(
             url=config['url'],
             consumer_key=config['api_ck'],
