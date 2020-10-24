@@ -396,7 +396,7 @@ def start_sync_products():
 
                 wp_images = wp['images']
                 wpi = 0
-                for wp_image in wp_images:
+                for wp_image in wp_images[:15]:
                     wpi += 1
                     prod_data['assets%d' % wpi] = wp_image['src']
                 for empty_image in range(wpi + 1, 15):
