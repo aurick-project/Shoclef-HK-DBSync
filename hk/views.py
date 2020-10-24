@@ -296,52 +296,52 @@ def start_sync_products():
 
     mapi = mongo_connect(mongo['url'])
     mongo_db = mapi[mongo['dbname']]
-    m_products = mongo_db['products'].find().limit(10)
-
-    for mp in m_products:
-        sync_statues = get_status('products')
-        if sync_statues.state == 0:
-            print('-' * 30)
-            print('Break syncing...')
-            break
-        print('-' * 30)
-        # pprint(mp)
-        # check if already exist in log
-        exist_in_log = get_product_from_log(mongo_id=mp['_id'])
-        if exist_in_log:
-            print('product exist in log db', exist_in_log.mongo_id, exist_in_log.woo_id)
-
-            if mp['_id'] in fix_products:
-                print('update product')
-                exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
-                if exist_in_woo:
-                    update_product(mongo_db, wapi, exist_in_log.woo_id, mp, cc_res)
-            continue
-            # check if exist in woocommerce
-            # exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
-            # if exist_in_woo:
-            #     print('product exist in woocommerce')
-            #     woo_prod_id = exist_in_woo['id']
-            #     check all info same with mongo and woocommerce product
-            # else:
-            #     woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
-        else:
-            print('product not exist in log db', mp['_id'])
-            # check if exist in woocommerce
-            exist_in_woo = woo_product_one(wapi, sku=mp['_id'])
-            if exist_in_woo:
-                print('exist in woocommerce')
-                woo_cat_id = add_category(mapi, wapi, mp['category'])
-                save_product_to_log(mongo_id=mp['_id'], woo_id=exist_in_woo[0]['id'], category=woo_cat_id)
-                woo_prod_id = exist_in_woo[0]['id']
-            else:
-                print('product not exist in woocommerce')
-                # insert to woocommerce
-                woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
-        if int(woo_prod_id) > 0:
-            print('product insert success %s' % woo_prod_id)
-        else:
-            print('product insert failed')
+    # m_products = mongo_db['products'].find().limit(10)
+    #
+    # for mp in m_products:
+    #     sync_statues = get_status('products')
+    #     if sync_statues.state == 0:
+    #         print('-' * 30)
+    #         print('Break syncing...')
+    #         break
+    #     print('-' * 30)
+    #     # pprint(mp)
+    #     # check if already exist in log
+    #     exist_in_log = get_product_from_log(mongo_id=mp['_id'])
+    #     if exist_in_log:
+    #         print('product exist in log db', exist_in_log.mongo_id, exist_in_log.woo_id)
+    #
+    #         if mp['_id'] in fix_products:
+    #             print('update product')
+    #             exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
+    #             if exist_in_woo:
+    #                 update_product(mongo_db, wapi, exist_in_log.woo_id, mp, cc_res)
+    #         continue
+    #         # check if exist in woocommerce
+    #         # exist_in_woo = woo_product_one(wapi, woo_id=exist_in_log.woo_id)
+    #         # if exist_in_woo:
+    #         #     print('product exist in woocommerce')
+    #         #     woo_prod_id = exist_in_woo['id']
+    #         #     check all info same with mongo and woocommerce product
+    #         # else:
+    #         #     woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
+    #     else:
+    #         print('product not exist in log db', mp['_id'])
+    #         # check if exist in woocommerce
+    #         exist_in_woo = woo_product_one(wapi, sku=mp['_id'])
+    #         if exist_in_woo:
+    #             print('exist in woocommerce')
+    #             woo_cat_id = add_category(mapi, wapi, mp['category'])
+    #             save_product_to_log(mongo_id=mp['_id'], woo_id=exist_in_woo[0]['id'], category=woo_cat_id)
+    #             woo_prod_id = exist_in_woo[0]['id']
+    #         else:
+    #             print('product not exist in woocommerce')
+    #             # insert to woocommerce
+    #             woo_prod_id = add_product(mongo_db, wapi, mp, cc_res)
+    #     if int(woo_prod_id) > 0:
+    #         print('product insert success %s' % woo_prod_id)
+    #     else:
+    #         print('product insert failed')
 
     # sync woo to mongo
     page = 1
