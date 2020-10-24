@@ -193,3 +193,14 @@ def shipping_add(wapi, shipping_data):
     except Exception as e:
         print(e)
     return None
+
+
+# get variation
+def woo_variation(wapi, pid, vid):
+    try:
+        r = wapi.get('products/%s/variations/%s' % (pid, vid))
+        if r.json():
+            return r.json()
+    except Exception as e:
+        print(e)
+    return None

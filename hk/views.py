@@ -348,7 +348,7 @@ def start_sync_products():
     csv_values = []
     while True:
         woo_prods = woo_products(wapi, page, 100)
-        page += 1
+        page += 100
         if woo_prods:
             for wp in woo_prods:
                 exist_woo = get_product_from_log(woo_id=wp['id'])
@@ -393,7 +393,12 @@ def start_sync_products():
                     prod_data['shippingBoxWidth'] = wp['dimensions']['width']
                     prod_data['shippingBoxHeight'] = wp['dimensions']['height']
                     prod_data['shippingBoxLength'] = wp['dimensions']['length']
-
+                prod_variations = []
+                if wp['variations']:
+                    for wa in wp['variations']:
+                        variation = woo_variation(wapi, wp['_id'], wa)
+                        prod_variations.append(variation)
+                pprint(prod_variations)
                 wp_images = wp['images']
                 wpi = 0
                 for wp_image in wp_images[:14]:
