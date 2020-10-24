@@ -409,7 +409,7 @@ def start_sync_products():
                   'shippingBoxHeight', 'shippingBoxLength', 'unit', 'brand_name', 'seller_name', 'price', 'oldPrice', 'quantity', 'customCarrier', 'customCarrierValue', 'colors',
                   'sizes', 'variationPrices', 'variationOldPrices', ]
 
-    with open('uploads/products-shoclef.hk-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
+    with open('uploads/products-shoclef.com-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=csv_fields)
         writer.writeheader()
         for csv_value in csv_values:
