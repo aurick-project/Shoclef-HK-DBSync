@@ -12,7 +12,9 @@ def woo_api(config):
             consumer_key=config['api_ck'],
             consumer_secret=config['api_cs'],
             version="wc/v3",
-            timeout=3000
+            timeout=3000,
+            query_string_auth=True,
+            wp_api=True
         )
     except:
         return None
