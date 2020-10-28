@@ -351,6 +351,7 @@ def start_sync_products():
     page = 1
     per_page = 100
     user_name_candidates = {}
+    print('get top categories')
     while True:
         # get top category
         top_categories = woo_categories(wapi, page, per_page, 0)
@@ -358,6 +359,7 @@ def start_sync_products():
         if top_categories:
             for tc in top_categories:
                 sub_page = 1
+                print('get sub categories')
                 while True:
                     sub_categories = woo_categories(wapi, sub_page, per_page, tc['id'])
                     sub_page += 1
@@ -377,6 +379,8 @@ def start_sync_products():
                         break
         else:
             break
+    print(user_name_candidates)
+    print('-'*50)
     # get products from woocommerce
     page = 1
     csv_values = []
@@ -428,7 +432,7 @@ def start_sync_products():
                         tags.append(tag['name'])
 
                 if wp['short_description']:
-                    prod_data['description'] = bs(wp['short_description']).get_text().replace('\n', '') + '\n[Tags: ' + ','.join(tags) + ']'
+                    prod_data['description'] = bs(wp['short_description'], parser='html.parser').get_text().replace('\n', '') + '\n[Tags: ' + ','.join(tags) + ']'
 
                 if wp['dimensions']:
                     prod_data['shippingBoxWidth'] = wp['dimensions']['width']
