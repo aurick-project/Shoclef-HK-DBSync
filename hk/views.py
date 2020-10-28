@@ -410,8 +410,8 @@ def start_sync_products():
                         prod_variations.append(variation_one)
                 else:
                     continue
-                print(prod_attributes)
-                pprint(prod_variations)
+                # print(prod_attributes)
+                # pprint(prod_variations)
                 prod_data['attributeNames'] = ';'.join(prod_attributes)
                 prod_data['attributeValues'] = ''
                 for prod_var in prod_variations:
