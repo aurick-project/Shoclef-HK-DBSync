@@ -491,7 +491,7 @@ def start_sync_products():
         writer = csv.DictWriter(csvfile, fieldnames=products_without_variations_fields)
         writer.writeheader()
         for csv_value in products_no_variation:
-            writer.writerow(csv_value)
+            writer.writerow({'id': csv_value})
     save_status('products', 0)
 
 
