@@ -439,7 +439,7 @@ def start_sync_products():
                     if wp['categories'][0]['id'] in user_name_candidates:
                         prod_data['seller_name'] = user_name_candidates[wp['categories'][0]['id']] + str(random.randint(1, 3)) + '@shoclef.com'
                         if prod_data['seller_name'] not in user_name_list:
-                            user_name_list = prod_data['seller_name']
+                            user_name_list.append(prod_data['seller_name'])
                     else:
                         prod_data['seller_name'] = 'men_clothing1@shoclef.com'
                 tags = []
