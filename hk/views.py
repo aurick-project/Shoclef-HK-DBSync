@@ -514,7 +514,7 @@ def start_sync_products():
         writer.writeheader()
         for csv_value in csv_values:
             writer.writerow(csv_value)
-
+    print(user_name_list)
     if products_no_variation:
         products_without_variations_fields = ['id', 'name', 'link']
         with open('uploads/products-shoclef.com-products-without-variations-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
