@@ -435,14 +435,13 @@ def start_sync_products():
                 prod_variations = []
                 prod_attributes = []
                 if wp['variations']:
-                    for wa in wp['variations']:
+                    variation_all = woo_variation(wapi, wp['id'], 0)
+                    for variation in variation_all:
                         variation_one = {}
-                        variation = woo_variation(wapi, wp['id'], wa)
-                        if variation and variation['attributes']:
-                            for var_attr in variation['attributes']:
-                                if var_attr['name'] not in prod_attributes:
-                                    prod_attributes.append(var_attr['name'])
-                                variation_one[var_attr['name']] = var_attr['option']
+                        for var_attr in variation['attributes']:
+                            if var_attr['name'] not in prod_attributes:
+                                prod_attributes.append(var_attr['name'])
+                            variation_one[var_attr['name']] = var_attr['option']
                         variation_one['price'] = variation['price']
                         variation_one['oldPrice'] = variation['regular_price']
                         prod_variations.append(variation_one)

@@ -200,9 +200,12 @@ def shipping_add(wapi, shipping_data):
 
 
 # get variation
-def woo_variation(wapi, pid, vid):
+def woo_variation(wapi, pid, vid=0):
     try:
-        r = wapi.get('products/%s/variations/%s' % (pid, vid))
+        if vid == 0:
+            r = wapi.get('products/%s/variations' % pid)
+        else:
+            r = wapi.get('products/%s/variations/%s' % (pid, vid))
         if r.json():
             return r.json()
     except Exception as e:
