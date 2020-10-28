@@ -442,7 +442,7 @@ def start_sync_products():
                         prod_data['seller_name'] = 'men_clothing1@shoclef.com'
                 tags = []
                 if wp['tags']:
-                    prod_data['brand_name'] = wp['tags'][0]['name']
+                    # prod_data['brand_name'] = wp['tags'][0]['name']
                     for tag in wp['tags']:
                         tags.append(tag['name'])
 
