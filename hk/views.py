@@ -359,7 +359,7 @@ def start_sync_products():
         if top_categories:
             for tc in top_categories:
                 sub_page = 1
-                print('get sub categories')
+                print('get sub categories of %s' % tc['name'])
                 while True:
                     sub_categories = woo_categories(wapi, sub_page, per_page, tc['id'])
                     sub_page += 1
@@ -380,7 +380,7 @@ def start_sync_products():
         else:
             break
     print(user_name_candidates)
-    print('-'*50)
+    print('-' * 50)
     # get products from woocommerce
     page = 1
     csv_values = []
