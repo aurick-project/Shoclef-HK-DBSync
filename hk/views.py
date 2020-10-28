@@ -438,6 +438,7 @@ def start_sync_products():
                 prod_variations = []
                 prod_attributes = []
                 if wp['variations']:
+                    continue
                     variation_all = woo_variation(wapi, wp['id'], 0)
                     for variation in variation_all:
                         variation_one = {}
