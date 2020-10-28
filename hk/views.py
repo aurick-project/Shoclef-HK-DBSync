@@ -408,6 +408,8 @@ def start_sync_products():
                         variation_one['price'] = variation['price']
                         variation_one['oldPrice'] = variation['regular_price']
                         prod_variations.append(variation_one)
+                else:
+                    continue
                 print(prod_attributes)
                 pprint(prod_variations)
                 return
