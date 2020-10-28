@@ -1,24 +1,17 @@
 import csv
-import os
-import json
 import random
-from slugify import slugify
-from pprint import pprint
+
+from bs4 import BeautifulSoup as bs
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from hk.mysql_connect import *
+from slugify import slugify
+
 from hk.mongo_connect import *
-from hk.settings import *
-from hk.scripts.products import *
 from hk.scripts.categories import *
-from hk.scripts.tags import *
-from hk.scripts.users import *
 from hk.scripts.livestreams import *
-from hk.scripts.orders import *
-from hk.scripts.payments import *
+from hk.scripts.products import *
 from hk.scripts.shipping_classes import *
-from pyexcel_ods import get_data
-from bs4 import BeautifulSoup as bs
+from hk.scripts.users import *
 
 
 # Create your views here.
