@@ -386,7 +386,36 @@ def start_sync_products():
     csv_values = []
     product_ids = []
     products_no_variation = []
-    user_name_list = []
+    user_name_list = {
+        'cameras_camcorders1@shoclef.com':      ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'cameras_camcorders2@shoclef.com':      ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'cameras_camcorders3@shoclef.com':      ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'car_vehicle_electronics1@shoclef.com': ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'car_vehicle_electronics2@shoclef.com': ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'car_vehicle_electronics3@shoclef.com': ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'cell_phones1@shoclef.com':             ['consumer_electronics1@shoclef.com', "Thompson's Goods"],
+        'cell_phones2@shoclef.com':             ['consumer_electronics1@shoclef.com', "Thompson's Goods"],
+        'cell_phones3@shoclef.com':             ['consumer_electronics1@shoclef.com', "Thompson's Goods"],
+        'computers_tablets1@shoclef.com':       ['consumer_electronics1@shoclef.com', 'Electronics Village'],
+        'computers_tablets2@shoclef.com':       ['consumer_electronics1@shoclef.com', 'Electronics Village'],
+        'computers_tablets3@shoclef.com':       ['consumer_electronics1@shoclef.com', 'Electronics Village'],
+        'gadgets1@shoclef.com':                 ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'gadgets2@shoclef.com':                 ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'gadgets3@shoclef.com':                 ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
+        'men_clothing1@shoclef.com':            ['men_clothing1@shoclef.com', 'Forward Designs'],
+        'men_clothing2@shoclef.com':            ['men_clothing2@shoclef.com', 'Old Balance'],
+        'men_clothing3@shoclef.com':            ['men_clothing3@shoclef.com', 'Kevin Claire'],
+        'women_clothing1@shoclef.com':          ['women_clothing1@shoclef.com', 'Peachy Fashion'],
+        'women_clothing2@shoclef.com':          ['women_clothing2@shoclef.com', 'Alyssum Fashion'],
+        'women_clothing3@shoclef.com':          ['women_clothing3@shoclef.com', 'Hibiscus Designs'],
+        'women_handbags_wallets1@shoclef.com':  ['women_bags1@sholef.com', 'B&Z'],
+        'women_handbags_wallets2@shoclef.com':  ['women_bags2@sholef.com', 'Fashion Diva'],
+        'women_handbags_wallets3@shoclef.com':  ['women_bags3@sholef.com', 'Honeyland Company'],
+        'women_shoes1@shoclef.com':             ['women_shoes1@shoclef.com', 'Slowgold Designs'],
+        'women_shoes2@shoclef.com':             ['women_shoes2@shoclef.com', 'Silverose Fashion'],
+        'women_shoes3@shoclef.com':             ['women_shoes3@shoclef.com', 'MRYA']
+    }
+
     while True:
         sync_statues = get_status('products')
         if sync_statues.state == 0:
@@ -434,14 +463,18 @@ def start_sync_products():
                     'attributeNames':     '',
                     'attributeValues':    '',
                 }
+                user_email = ''
                 if wp['categories']:
                     prod_data['categoryID'] = wp['categories'][0]['slug']
                     if wp['categories'][0]['id'] in user_name_candidates:
-                        prod_data['seller_name'] = user_name_candidates[wp['categories'][0]['id']] + str(random.randint(1, 3)) + '@shoclef.com'
-                        if prod_data['seller_name'] not in user_name_list:
-                            user_name_list.append(prod_data['seller_name'])
+                        user_email = user_name_candidates[wp['categories'][0]['id']] + str(random.randint(1, 3)) + '@shoclef.com'
+                        if user_email not in user_name_list:
+                            user_name_list[user_email] = ['men_clothing1@shoclef.com', 'Forward Designs']
                     else:
-                        prod_data['seller_name'] = 'men_clothing1@shoclef.com'
+                        user_email = 'men_clothing1@shoclef.com'
+                if user_email != '':
+                    prod_data['username'] = prod_data['brand'] = prod_data['seller_name'] = user_name_list[user_email][1]
+                    prod_data['email'] = user_name_list[user_email][0]
                 tags = []
                 if wp['tags']:
                     # prod_data['brand_name'] = wp['tags'][0]['name']
