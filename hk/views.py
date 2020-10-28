@@ -554,7 +554,16 @@ def start_sync_products():
             for csv_value in products_no_variation:
                 writer.writerow(csv_value)
         # delete products have no variations
-        woo_product_delete(wapi, [d['id'] for d in products_no_variation])
+        delete_products_ids = [d['id'] for d in products_no_variation]
+        page = 0
+        per_page = 100
+        while True:
+            delete_products_sub = delete_products_ids[page * per_page: (page + 1) * per_page - 1]
+            page += 1
+            if delete_products_sub:
+                woo_product_delete(wapi, delete_products_sub)
+            else:
+                break
 
     save_status('products', 0)
 
