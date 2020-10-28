@@ -347,6 +347,12 @@ def start_sync_products():
     user_name_candidates = {}
     print('get top categories')
     while True:
+        sync_statues = get_status('products')
+        if sync_statues.state == 0:
+            print('-' * 30)
+            print('Break syncing...')
+            break
+        print('-' * 30)
         # get top category
         top_categories = woo_categories(wapi, page, per_page, 0)
         page += 1
@@ -381,10 +387,22 @@ def start_sync_products():
     product_ids = []
     products_no_variation = []
     while True:
+        sync_statues = get_status('products')
+        if sync_statues.state == 0:
+            print('-' * 30)
+            print('Break syncing...')
+            break
+        print('-' * 30)
         woo_prods = woo_products(wapi, page, 100)
         page += 1
         if woo_prods:
             for wp in woo_prods:
+                sync_statues = get_status('products')
+                if sync_statues.state == 0:
+                    print('-' * 30)
+                    print('Break syncing...')
+                    break
+                print('-' * 30)
                 exist_woo = get_product_from_log(woo_id=wp['id'])
                 if exist_woo or wp['id'] in product_ids:
                     print('product exist in woo & mongo')
