@@ -429,7 +429,7 @@ def start_sync_products():
                         tags.append(tag['name'])
 
                 if wp['short_description']:
-                    prod_data['description'] = bs(wp['short_description'], 'html.parser').get_text().replace('\n', '') + '\n[Tags: ' + ','.join(tags) + ']'
+                    prod_data['description'] = bs(wp['short_description'], 'html.parser').get_text().replace('\n', '  ') + '\n[Tags: ' + ','.join(tags) + ']'
 
                 if wp['dimensions']:
                     prod_data['shippingBoxWidth'] = wp['dimensions']['width']
