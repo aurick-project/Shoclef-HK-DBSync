@@ -1,5 +1,5 @@
 import csv
-
+import os
 import json
 from pprint import pprint
 from django.http import HttpResponse
@@ -15,6 +15,7 @@ from hk.scripts.livestreams import *
 from hk.scripts.orders import *
 from hk.scripts.payments import *
 from hk.scripts.shipping_classes import *
+from pyexcel_ods import get_data
 
 
 # Create your views here.
@@ -281,7 +282,7 @@ def start_sync_categories_delete():
 def start_sync_products():
     print('start syncing products')
     print('-' * 30)
-    print('get products from mongo')
+    # print('get products from mongo')
 
     # get currency convert rate
     cc_res = []
@@ -344,6 +345,7 @@ def start_sync_products():
     #         print('product insert failed')
 
     # sync woo to mongo
+    # get products from woocommerce
     page = 1
     csv_values = []
     while True:
@@ -378,10 +380,8 @@ def start_sync_products():
                     'quantity':           wp['stock_quantity'] if wp['stock_quantity'] else 0,
                     'customCarrier':      '',
                     'customCarrierValue': '',
-                    'colors':             '',
-                    'sizes':              '',
-                    'variationPrices':    '',
-                    'variationOldPrices': '',
+                    'attributeNames':     '',
+                    'attributeValues':    '',
                 }
                 if wp['categories']:
                     prod_data['categoryID'] = wp['categories'][0]['slug']
@@ -394,11 +394,22 @@ def start_sync_products():
                     prod_data['shippingBoxHeight'] = wp['dimensions']['height']
                     prod_data['shippingBoxLength'] = wp['dimensions']['length']
                 prod_variations = []
+                prod_attributes = []
                 if wp['variations']:
                     for wa in wp['variations']:
+                        variation_one = {}
                         variation = woo_variation(wapi, wp['id'], wa)
-                        prod_variations.append(variation)
+                        if variation and variation['attributes']:
+                            for var_attr in variation['attributes']:
+                                if var_attr['name'] not in prod_attributes:
+                                    prod_attributes.append(var_attr['name'])
+                                variation_one[var_attr['name']] = var_attr['option']
+                        variation_one['price'] = variation['price']
+                        variation_one['oldPrice'] = variation['regular_price']
+                        prod_variations.append(variation_one)
+                print(prod_attributes)
                 pprint(prod_variations)
+                return
                 wp_images = wp['images']
                 wpi = 0
                 for wp_image in wp_images[:14]:
@@ -411,8 +422,8 @@ def start_sync_products():
             break
     csv_fields = ['_id', 'username', 'email', 'assets1', 'assets2', 'assets3', 'assets4', 'assets5', 'assets6', 'assets7', 'assets8', 'assets9', 'assets10', 'assets11', 'assets12',
                   'assets13', 'assets14', 'freeDeliveryTo', 'isDeleted', 'title', 'description', 'currency', 'categoryID', 'weightValue', 'weightUnit', 'shippingBoxWidth',
-                  'shippingBoxHeight', 'shippingBoxLength', 'unit', 'brand_name', 'seller_name', 'price', 'oldPrice', 'quantity', 'customCarrier', 'customCarrierValue', 'colors',
-                  'sizes', 'variationPrices', 'variationOldPrices', ]
+                  'shippingBoxHeight', 'shippingBoxLength', 'unit', 'brand_name', 'seller_name', 'price', 'oldPrice', 'quantity', 'customCarrier', 'customCarrierValue',
+                  'attributeNames', 'attributeValues']
 
     with open('uploads/products-shoclef.com-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=csv_fields)
