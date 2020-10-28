@@ -386,6 +386,7 @@ def start_sync_products():
     csv_values = []
     product_ids = []
     products_no_variation = []
+    user_name_list = []
     while True:
         sync_statues = get_status('products')
         if sync_statues.state == 0:
@@ -438,6 +439,8 @@ def start_sync_products():
                     prod_data['categoryID'] = wp['categories'][0]['slug']
                     if wp['categories'][0]['id'] in user_name_candidates:
                         prod_data['seller_name'] = user_name_candidates[wp['categories'][0]['id']] + str(random.randint(1, 3)) + '@shoclef.com'
+                        if prod_data['seller_name'] not in user_name_list:
+                            user_name_list = prod_data['seller_name']
                     else:
                         prod_data['seller_name'] = 'men_clothing1@shoclef.com'
                 tags = []
@@ -457,6 +460,7 @@ def start_sync_products():
                 prod_attributes = []
                 if wp['type'] == 'variable':
                     if wp['variations']:
+                        continue
                         variation_all = woo_variation(wapi, wp['id'], 0)
                         for variation in variation_all:
                             variation_one = {}
