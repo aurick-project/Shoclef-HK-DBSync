@@ -412,7 +412,16 @@ def start_sync_products():
                     continue
                 print(prod_attributes)
                 pprint(prod_variations)
-                return
+                prod_data['attributeNames'] = ';'.join(prod_attributes)
+                prod_data['attributeValues'] = ''
+                for prod_var in prod_variations:
+                    for prod_attr in prod_attributes:
+                        if prod_attr in prod_var:
+                            prod_data['attributeValues'] += '%s|' % prod_var[prod_attr]
+                        else:
+                            prod_data['attributeValues'] += '0'
+                    prod_data['attributeValues'] += '%s|%s|%s;' % (prod_var['price'], prod_var['oldPrice'], prod_data['quantity'])
+                prod_data['attributeValues'] = prod_data['attributeValues'][:-1]
                 wp_images = wp['images']
                 wpi = 0
                 for wp_image in wp_images[:14]:
