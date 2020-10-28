@@ -16,6 +16,7 @@ from hk.scripts.orders import *
 from hk.scripts.payments import *
 from hk.scripts.shipping_classes import *
 from pyexcel_ods import get_data
+from bs4 import BeautifulSoup as bs
 
 
 # Create your views here.
