@@ -473,7 +473,7 @@ def start_sync_products():
                     else:
                         user_email = 'men_clothing1@shoclef.com'
                 if user_email != '':
-                    prod_data['username'] = prod_data['brand'] = prod_data['seller_name'] = user_name_list[user_email][1]
+                    prod_data['username'] = prod_data['brand_name'] = prod_data['seller_name'] = user_name_list[user_email][1]
                     prod_data['email'] = user_name_list[user_email][0]
                 tags = []
                 if wp['tags']:
@@ -548,7 +548,7 @@ def start_sync_products():
     print(user_name_list)
     if products_no_variation:
         products_without_variations_fields = ['id', 'name', 'link']
-        with open('uploads/products-shoclef.com-products-without-variations-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
+        with open('uploads/products-shoclef.com-without-variations-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=products_without_variations_fields)
             writer.writeheader()
             for csv_value in products_no_variation:
