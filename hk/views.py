@@ -403,7 +403,6 @@ def start_sync_products():
                     print('-' * 30)
                     print('Break syncing...')
                     break
-                print('-' * 30)
                 exist_woo = get_product_from_log(woo_id=wp['id'])
                 if exist_woo or wp['id'] in product_ids:
                     print('product exist in woo & mongo')
