@@ -492,13 +492,14 @@ def start_sync_products():
         for csv_value in csv_values:
             writer.writerow(csv_value)
 
-    products_without_variations_fields = ['id', 'name', 'link']
-    with open('uploads/products-shoclef.com-products-without-variations-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=products_without_variations_fields)
-        writer.writeheader()
-        for csv_value in products_no_variation:
-            writer.writerow(csv_value)
-    pprint([d['id'] for d in products_no_variation])
+    if products_no_variation:
+        products_without_variations_fields = ['id', 'name', 'link']
+        with open('uploads/products-shoclef.com-products-without-variations-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=products_without_variations_fields)
+            writer.writeheader()
+            for csv_value in products_no_variation:
+                writer.writerow(csv_value)
+        pprint([d['id'] for d in products_no_variation])
     save_status('products', 0)
 
 
