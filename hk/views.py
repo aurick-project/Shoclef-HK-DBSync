@@ -382,7 +382,7 @@ def start_sync_products():
     csv_values = []
     while True:
         woo_prods = woo_products(wapi, page, 100)
-        page += 100
+        page += 1
         if woo_prods:
             for wp in woo_prods:
                 exist_woo = get_product_from_log(woo_id=wp['id'])
