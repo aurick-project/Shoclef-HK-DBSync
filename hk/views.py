@@ -438,7 +438,6 @@ def start_sync_products():
                 prod_variations = []
                 prod_attributes = []
                 if wp['variations']:
-                    continue
                     variation_all = woo_variation(wapi, wp['id'], 0)
                     for variation in variation_all:
                         variation_one = {}
@@ -448,6 +447,12 @@ def start_sync_products():
                             variation_one[var_attr['name']] = var_attr['option']
                         variation_one['price'] = variation['price']
                         variation_one['oldPrice'] = variation['regular_price']
+
+                        if float(prod_data['price']) == 0 or float(prod_data['price']) > float(variation['price']):
+                            prod_data['price'] = variation['price']
+                        if float(prod_data['oldPrice']) == 0 or float(prod_data['oldPrice']) > float(variation['regular_price']):
+                            prod_data['oldPrice'] = variation['regular_price']
+
                         variation_one['quantity'] = variation['stock_quantity'] if 'stock_quantity' in variation else 0
                         prod_variations.append(variation_one)
                 else:
