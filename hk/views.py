@@ -373,7 +373,7 @@ def start_sync_products():
                         break
         else:
             break
-    print(user_name_candidates)
+    # print(user_name_candidates)
     print('-' * 50)
     # get products from woocommerce
     page = 1
@@ -387,6 +387,7 @@ def start_sync_products():
                 if exist_woo:
                     print('product exist in woo & mongo')
                     continue
+                print('process product %s' % wp['id'])
                 prod_data = {
                     '_id':                '',
                     'username':           'Designer Creations',
