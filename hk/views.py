@@ -498,6 +498,7 @@ def start_sync_products():
         writer.writeheader()
         for csv_value in products_no_variation:
             writer.writerow(csv_value)
+    pprint([d['id'] for d in products_no_variation])
     save_status('products', 0)
 
 
