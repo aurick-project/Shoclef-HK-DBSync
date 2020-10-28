@@ -1,6 +1,7 @@
 import csv
 import os
 import json
+import random
 from pprint import pprint
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -346,6 +347,36 @@ def start_sync_products():
     #         print('product insert failed')
 
     # sync woo to mongo
+    # get categories from woocommerce
+    page = 1
+    per_page = 100
+    user_name_candidates = {}
+    while True:
+        # get top category
+        top_categories = woo_categories(wapi, page, per_page, 0)
+        page += 1
+        if top_categories:
+            for tc in top_categories:
+                sub_page = 1
+                while True:
+                    sub_categories = woo_categories(wapi, sub_page, per_page, tc['id'])
+                    sub_page += 1
+                    if sub_categories:
+                        for sc in sub_categories:
+                            user_name_candidates[sc['id']] = sc['name'].lower().replace(' ', '_')
+                            sub_sub_page = 1
+                            while True:
+                                last_categories = woo_categories(wapi, sub_sub_page, per_page, sc['id'])
+                                sub_sub_page += 1
+                                if last_categories:
+                                    for lc in last_categories:
+                                        user_name_candidates[lc['id']] = user_name_candidates[sc['id']]
+                                else:
+                                    break
+                    else:
+                        break
+        else:
+            break
     # get products from woocommerce
     page = 1
     csv_values = []
@@ -365,7 +396,7 @@ def start_sync_products():
                     'freeDeliveryTo':     'DOMESTIC',
                     'isDeleted':          'FALSE',
                     'title':              wp['name'],
-                    'description':        wp['description'],
+                    'description':        '',
                     'currency':           'USD',
                     'categoryID':         '',
                     'weightValue':        wp['weight'],
@@ -386,9 +417,18 @@ def start_sync_products():
                 }
                 if wp['categories']:
                     prod_data['categoryID'] = wp['categories'][0]['slug']
-
+                    if wp['categories'][0]['id'] in user_name_candidates:
+                        prod_data['seller_name'] = user_name_candidates[wp['categories'][0]['id']] + str(random.randint(1, 3)) + '@shoclef.com'
+                    else:
+                        prod_data['seller_name'] = 'men_clothing1@shoclef.com'
+                tags = []
                 if wp['tags']:
                     prod_data['brand_name'] = wp['tags'][0]['name']
+                    for tag in wp['tags']:
+                        tags.append(tag['name'])
+
+                if wp['short_description']:
+                    prod_data['description'] = bs(wp['short_description']).get_text().replace('\n', '') + '\n[Tags: ' + ','.join(tags) + ']'
 
                 if wp['dimensions']:
                     prod_data['shippingBoxWidth'] = wp['dimensions']['width']

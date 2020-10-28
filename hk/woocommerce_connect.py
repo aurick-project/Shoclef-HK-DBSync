@@ -106,9 +106,13 @@ def woo_product_delete(wcapi, prod_id):
 
 
 # get categories
-def woo_categories(wcapi, page=1, per_page=100):
+def woo_categories(wcapi, page=1, per_page=100, parent=-1):
     try:
-        cats = wcapi.get('products/categories', params={'page': page, 'per_page': per_page})
+        if parent == -1:
+            cats = wcapi.get('products/categories', params={'page': page, 'per_page': per_page})
+        else:
+            cats = wcapi.get('products/categories', params={'page': page, 'per_page': per_page, 'parent': parent})
+
         return cats.json()
     except:
         print('get %s %s categories from woocommerce failed' % (page, per_page))
