@@ -445,6 +445,7 @@ def start_sync_products():
                             variation_one[var_attr['name']] = var_attr['option']
                         variation_one['price'] = variation['price']
                         variation_one['oldPrice'] = variation['regular_price']
+                        variation_one['quantity'] = variation['stock_quantity'] if 'stock_quantity' in variation else 0
                         prod_variations.append(variation_one)
                 else:
                     continue
@@ -458,7 +459,7 @@ def start_sync_products():
                             prod_data['attributeValues'] += '%s|' % prod_var[prod_attr]
                         else:
                             prod_data['attributeValues'] += '0'
-                    prod_data['attributeValues'] += '%s|%s|%s;' % (prod_var['price'], prod_var['oldPrice'], prod_data['quantity'])
+                    prod_data['attributeValues'] += '%s|%s|%s;' % (prod_var['price'], prod_var['oldPrice'], prod_var['quantity'])
                 prod_data['attributeValues'] = prod_data['attributeValues'][:-1]
                 wp_images = wp['images']
                 wpi = 0
