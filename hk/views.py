@@ -2,6 +2,7 @@ import csv
 import os
 import json
 import random
+from slugify import slugify
 from pprint import pprint
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -365,7 +366,7 @@ def start_sync_products():
                     sub_page += 1
                     if sub_categories:
                         for sc in sub_categories:
-                            user_name_candidates[sc['id']] = sc['name'].lower().replace(' ', '_')
+                            user_name_candidates[sc['id']] = slugify(sc['name']).replace('-', '_')
                             sub_sub_page = 1
                             while True:
                                 last_categories = woo_categories(wapi, sub_sub_page, per_page, sc['id'])
