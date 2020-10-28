@@ -378,13 +378,14 @@ def start_sync_products():
     # get products from woocommerce
     page = 1
     csv_values = []
+    product_ids = []
     while True:
         woo_prods = woo_products(wapi, page, 100)
         page += 1
         if woo_prods:
             for wp in woo_prods:
                 exist_woo = get_product_from_log(woo_id=wp['id'])
-                if exist_woo:
+                if exist_woo or wp['id'] in product_ids:
                     print('product exist in woo & mongo')
                     continue
                 print('process product %s' % wp['id'])
@@ -468,6 +469,7 @@ def start_sync_products():
                     prod_data['assets%d' % wpi] = wp_image['src']
                 for empty_image in range(wpi + 1, 15):
                     prod_data['assets%d' % empty_image] = ''
+                product_ids.append(wp['id'])
                 csv_values.append(prod_data)
         else:
             break
