@@ -437,39 +437,40 @@ def start_sync_products():
                     prod_data['shippingBoxLength'] = wp['dimensions']['length']
                 prod_variations = []
                 prod_attributes = []
-                if wp['variations']:
-                    variation_all = woo_variation(wapi, wp['id'], 0)
-                    for variation in variation_all:
-                        variation_one = {}
-                        for var_attr in variation['attributes']:
-                            if var_attr['name'] not in prod_attributes:
-                                prod_attributes.append(var_attr['name'])
-                            variation_one[var_attr['name']] = var_attr['option']
-                        variation_one['price'] = variation['price']
-                        variation_one['oldPrice'] = variation['regular_price']
+                if wp['type'] == 'variable':
+                    if wp['variations']:
+                        variation_all = woo_variation(wapi, wp['id'], 0)
+                        for variation in variation_all:
+                            variation_one = {}
+                            for var_attr in variation['attributes']:
+                                if var_attr['name'] not in prod_attributes:
+                                    prod_attributes.append(var_attr['name'])
+                                variation_one[var_attr['name']] = var_attr['option']
+                            variation_one['price'] = variation['price']
+                            variation_one['oldPrice'] = variation['regular_price']
 
-                        if float(prod_data['price']) == 0 or float(prod_data['price']) > float(variation['price']):
-                            prod_data['price'] = variation['price']
-                        if float(prod_data['oldPrice']) == 0 or float(prod_data['oldPrice']) > float(variation['regular_price']):
-                            prod_data['oldPrice'] = variation['regular_price']
+                            if float(prod_data['price']) == 0 or float(prod_data['price']) > float(variation['price']):
+                                prod_data['price'] = variation['price']
+                            if float(prod_data['oldPrice']) == 0 or float(prod_data['oldPrice']) > float(variation['regular_price']):
+                                prod_data['oldPrice'] = variation['regular_price']
 
-                        variation_one['quantity'] = variation['stock_quantity'] if 'stock_quantity' in variation else 0
-                        prod_variations.append(variation_one)
-                else:
-                    products_no_variation.append({'id': wp['id'], 'name': wp['name'], 'link': wp['permalink']})
-                    continue
-                # print(prod_attributes)
-                # pprint(prod_variations)
-                prod_data['attributeNames'] = ';'.join(prod_attributes)
-                prod_data['attributeValues'] = ''
-                for prod_var in prod_variations:
-                    for prod_attr in prod_attributes:
-                        if prod_attr in prod_var:
-                            prod_data['attributeValues'] += '%s|' % prod_var[prod_attr]
-                        else:
-                            prod_data['attributeValues'] += '0'
-                    prod_data['attributeValues'] += '%s|%s|%s;' % (prod_var['price'], prod_var['oldPrice'], prod_var['quantity'])
-                prod_data['attributeValues'] = prod_data['attributeValues'][:-1]
+                            variation_one['quantity'] = variation['stock_quantity'] if 'stock_quantity' in variation else 0
+                            prod_variations.append(variation_one)
+                    else:
+                        products_no_variation.append({'id': wp['id'], 'name': wp['name'], 'link': wp['permalink']})
+                        continue
+                    # print(prod_attributes)
+                    # pprint(prod_variations)
+                    prod_data['attributeNames'] = ';'.join(prod_attributes)
+                    prod_data['attributeValues'] = ''
+                    for prod_var in prod_variations:
+                        for prod_attr in prod_attributes:
+                            if prod_attr in prod_var:
+                                prod_data['attributeValues'] += '%s|' % prod_var[prod_attr]
+                            else:
+                                prod_data['attributeValues'] += '0'
+                        prod_data['attributeValues'] += '%s|%s|%s;' % (prod_var['price'], prod_var['oldPrice'], prod_var['quantity'])
+                    prod_data['attributeValues'] = prod_data['attributeValues'][:-1]
                 wp_images = wp['images']
                 wpi = 0
                 for wp_image in wp_images[:14]:
