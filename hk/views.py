@@ -451,7 +451,7 @@ def start_sync_products():
                         variation_one['quantity'] = variation['stock_quantity'] if 'stock_quantity' in variation else 0
                         prod_variations.append(variation_one)
                 else:
-                    products_no_variation.append(wp['id'])
+                    products_no_variation.append({'id': wp['id'], 'name': wp['name'], 'link': wp['permalink']})
                     continue
                 # print(prod_attributes)
                 # pprint(prod_variations)
@@ -487,12 +487,12 @@ def start_sync_products():
         for csv_value in csv_values:
             writer.writerow(csv_value)
 
-    products_without_variations_fields = ['id']
+    products_without_variations_fields = ['id', 'name', 'link']
     with open('uploads/products-shoclef.com-products-without-variations-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=products_without_variations_fields)
         writer.writeheader()
         for csv_value in products_no_variation:
-            writer.writerow({'id': csv_value})
+            writer.writerow(csv_value)
     save_status('products', 0)
 
 
