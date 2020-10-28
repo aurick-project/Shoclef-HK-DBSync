@@ -553,7 +553,9 @@ def start_sync_products():
             writer.writeheader()
             for csv_value in products_no_variation:
                 writer.writerow(csv_value)
-        # print([d['id'] for d in products_no_variation])
+        # delete products have no variations
+        woo_product_delete(wapi, [d['id'] for d in products_no_variation])
+
     save_status('products', 0)
 
 
