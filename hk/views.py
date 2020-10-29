@@ -506,7 +506,7 @@ def start_sync_products():
                 if wp['categories'][0]['id'] in user_name_candidates:
                     user_email = user_name_candidates[wp['categories'][0]['id']] + str(random.randint(1, 3)) + '@shoclef.com'
                     if user_email not in user_name_list:
-                        user_name_list[user_email] = ['men_clothing1@shoclef.com', 'Forward Designs']
+                        user_name_list[user_email] = ['consumer_electronics3@shoclef.com', 'Electronics Village']
                 else:
                     user_email = 'consumer_electronics3@shoclef.com'
             if user_email != '':
