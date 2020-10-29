@@ -286,26 +286,27 @@ def start_sync_products():
     with open('uploads/products-shoclef.com-modified-10282020.csv', 'r', encoding='utf-8') as csvfile:
         csv_values = csv.DictReader(csvfile)
         for csv_value in csv_values:
-            sync_statues = get_status('products')
-            if sync_statues.state == 0:
-                print('-' * 30)
-                print('Break syncing...')
-                break
-            # print('-' * 50)
-            # print(csv_value['title'], csv_value['email'])
-            # print('*' * 50)
-            post_from_mysql = mysql_select_table(mysql_cursor, 'wp_posts', where='post_title="%s"' % csv_value['title'].strip(), fetch='one')
-            if post_from_mysql:
-                # print('found in woocommerce %s' % post_from_mysql['ID'])
-                user_from_mysql = mysql_select_table(mysql_cursor, 'wp_users', where='user_email="%s"' % csv_value['email'].strip(), fetch='one')
-                if user_from_mysql:
-                    # continue
-                    print('found in user list %s, updating----' % user_from_mysql['ID'])
-                    mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
+            if 'women_bags' in csv_value['email'] or 'consumer_electronics' in csv_value['email']:
+                sync_statues = get_status('products')
+                if sync_statues.state == 0:
+                    print('-' * 30)
+                    print('Break syncing...')
+                    break
+                print('-' * 50)
+                print(csv_value['title'], csv_value['email'])
+                print('*' * 50)
+                post_from_mysql = mysql_select_table(mysql_cursor, 'wp_posts', where='post_title="%s"' % csv_value['title'].strip(), fetch='one')
+                if post_from_mysql:
+                    # print('found in woocommerce %s' % post_from_mysql['ID'])
+                    user_from_mysql = mysql_select_table(mysql_cursor, 'wp_users', where='user_email="%s"' % csv_value['email'].strip(), fetch='one')
+                    if user_from_mysql:
+                        # continue
+                        print('found in user list %s, updating----' % user_from_mysql['ID'])
+                        mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
+                    else:
+                        print(2, '---', csv_value['title'], csv_value['email'])
                 else:
-                    print(2, '---', csv_value['title'], csv_value['email'])
-            else:
-                print(1, '------', csv_value['title'], csv_value['email'])
+                    print(1, '------', csv_value['title'], csv_value['email'])
     # get currency convert rate
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products', 0)
