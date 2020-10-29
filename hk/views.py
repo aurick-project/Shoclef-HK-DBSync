@@ -453,6 +453,122 @@ def start_sync_products_temp():
         'women_shoes3@shoclef.com':             ['women_shoes3@shoclef.com', 'MRYA']
     }
 
+    mysql_conn = mysql_db_connect(hk_mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+    all_products_without_user = mysql_select_table(mysql_cursor, 'wp_posts', where='post_type="product" and post_author=2')
+    for product in all_products_without_user:
+        exist_product_in_log = get_product_from_log(woo_id=product['ID'])
+        if exist_product_in_log:
+            print('product exist in log %s' % product['ID'])
+            continue
+        wp = woo_product_one(wapi, woo_id=product['ID'])
+        if wp:
+            sync_statues = get_status('products')
+            if sync_statues.state == 0:
+                print('-' * 30)
+                print('Break syncing...')
+                break
+            print('process product %s' % wp['id'])
+            prod_data = {
+                '_id':                '',
+                'username':           'Designer Creations',
+                'email':              'shoclef.outnet@shoclef.com',
+                'freeDeliveryTo':     'DOMESTIC',
+                'isDeleted':          'FALSE',
+                'title':              wp['name'],
+                'description':        '',
+                'currency':           'USD',
+                'categoryID':         '',
+                'weightValue':        wp['weight'],
+                'weightUnit':         'oz',
+                'shippingBoxWidth':   '0',
+                'shippingBoxHeight':  '0',
+                'shippingBoxLength':  '0',
+                'unit':               'inch',
+                'brand_name':         '',
+                'seller_name':        'management',
+                'price':              wp['sale_price'] if wp['sale_price'] else 0,
+                'oldPrice':           wp['regular_price'] if wp['regular_price'] else 0,
+                'quantity':           wp['stock_quantity'] if wp['stock_quantity'] else 0,
+                'customCarrier':      '',
+                'customCarrierValue': '',
+                'attributeNames':     '',
+                'attributeValues':    '',
+            }
+            user_email = ''
+            if wp['categories']:
+                prod_data['categoryID'] = wp['categories'][0]['slug']
+                if wp['categories'][0]['id'] in user_name_candidates:
+                    user_email = user_name_candidates[wp['categories'][0]['id']] + str(random.randint(1, 3)) + '@shoclef.com'
+                    if user_email not in user_name_list:
+                        user_name_list[user_email] = ['men_clothing1@shoclef.com', 'Forward Designs']
+                else:
+                    user_email = 'men_clothing1@shoclef.com'
+            if user_email != '':
+                prod_data['username'] = prod_data['brand_name'] = prod_data['seller_name'] = user_name_list[user_email][1]
+                prod_data['email'] = user_name_list[user_email][0]
+            tags = []
+            if wp['tags']:
+                # prod_data['brand_name'] = wp['tags'][0]['name']
+                for tag in wp['tags']:
+                    tags.append(tag['name'])
+
+            if wp['short_description']:
+                prod_data['description'] = bs(wp['short_description'], 'html.parser').get_text().replace('\n', '  ') + '\n[Tags: ' + ','.join(tags) + ']'
+
+            if wp['dimensions']:
+                prod_data['shippingBoxWidth'] = wp['dimensions']['width']
+                prod_data['shippingBoxHeight'] = wp['dimensions']['height']
+                prod_data['shippingBoxLength'] = wp['dimensions']['length']
+            prod_variations = []
+            prod_attributes = []
+            if wp['type'] == 'variable':
+                if wp['variations']:
+                    variation_all = woo_variation(wapi, wp['id'], 0)
+                    for variation in variation_all:
+                        variation_one = {}
+                        for var_attr in variation['attributes']:
+                            if var_attr['name'] not in prod_attributes:
+                                prod_attributes.append(var_attr['name'])
+                            variation_one[var_attr['name']] = var_attr['option']
+                        variation_one['price'] = variation['price']
+                        variation_one['oldPrice'] = variation['regular_price']
+
+                        if float(prod_data['price']) == 0 or float(prod_data['price']) > float(variation['price']):
+                            prod_data['price'] = variation['price']
+                        if float(prod_data['oldPrice']) == 0 or float(prod_data['oldPrice']) > float(variation['regular_price']):
+                            prod_data['oldPrice'] = variation['regular_price']
+
+                        variation_one['quantity'] = variation['stock_quantity'] if 'stock_quantity' in variation else 0
+                        prod_variations.append(variation_one)
+                else:
+                    products_no_variation.append({'id': wp['id'], 'name': wp['name'], 'link': wp['permalink']})
+                    continue
+                # print(prod_attributes)
+                # pprint(prod_variations)
+                prod_data['attributeNames'] = ';'.join(prod_attributes)
+                prod_data['attributeValues'] = ''
+                for prod_var in prod_variations:
+                    for prod_attr in prod_attributes:
+                        if prod_attr in prod_var:
+                            prod_data['attributeValues'] += '%s|' % prod_var[prod_attr]
+                        else:
+                            prod_data['attributeValues'] += '0'
+                    prod_data['attributeValues'] += '%s|%s|%s;' % (prod_var['price'], prod_var['oldPrice'], prod_var['quantity'])
+                prod_data['attributeValues'] = prod_data['attributeValues'][:-1]
+            wp_images = wp['images']
+            wpi = 0
+            for wp_image in wp_images[:14]:
+                wpi += 1
+                prod_data['assets%d' % wpi] = wp_image['src']
+            for empty_image in range(wpi + 1, 15):
+                prod_data['assets%d' % empty_image] = ''
+            product_ids.append(wp['id'])
+            csv_values.append(prod_data)
+
+    mysql_db_close(mysql_conn, mysql_cursor)
+    """ logic for all products from woo apo
+    
     while True:
         sync_statues = get_status('products')
         if sync_statues.state == 0:
@@ -572,6 +688,7 @@ def start_sync_products_temp():
                 csv_values.append(prod_data)
         else:
             break
+    """
     csv_fields = ['_id', 'username', 'email', 'assets1', 'assets2', 'assets3', 'assets4', 'assets5', 'assets6', 'assets7', 'assets8', 'assets9', 'assets10', 'assets11', 'assets12',
                   'assets13', 'assets14', 'freeDeliveryTo', 'isDeleted', 'title', 'description', 'currency', 'categoryID', 'weightValue', 'weightUnit', 'shippingBoxWidth',
                   'shippingBoxHeight', 'shippingBoxLength', 'unit', 'brand_name', 'seller_name', 'price', 'oldPrice', 'quantity', 'customCarrier', 'customCarrierValue',
