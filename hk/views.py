@@ -302,9 +302,9 @@ def start_sync_products():
                     continue
                     print('found in user list %s, updating----' % user_from_mysql['ID'])
                 else:
-                    print(csv_value['title'], csv_value['email'])
+                    print(2, '---', csv_value['title'], csv_value['email'])
             else:
-                print(csv_value['title'], csv_value['email'])
+                print(1, '------', csv_value['title'], csv_value['email'])
             # mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
     # get currency convert rate
     mysql_db_close(mysql_conn, mysql_cursor)
