@@ -495,8 +495,8 @@ def start_sync_products():
                 'price':              wp['sale_price'] if wp['sale_price'] else 0,
                 'oldPrice':           wp['regular_price'] if wp['regular_price'] else 0,
                 'quantity':           wp['stock_quantity'] if wp['stock_quantity'] else 0,
-                'customCarrier':      '',
-                'customCarrierValue': '',
+                'customCarrier':      'e97d243a-157d-4bc1-90a1-db1c5073ac89',
+                'customCarrierValue': '3',
                 'attributeNames':     '',
                 'attributeValues':    '',
             }
