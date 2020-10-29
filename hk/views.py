@@ -286,6 +286,11 @@ def start_sync_products():
     with open('uploads/products-shoclef.com-modified-10282020.csv', 'r', encoding='utf-8') as csvfile:
         csv_values = csv.DictReader(csvfile)
         for csv_value in csv_values:
+            sync_statues = get_status('products')
+            if sync_statues.state == 0:
+                print('-' * 30)
+                print('Break syncing...')
+                break
             # print(csv_value['title'], csv_value['email'])
             post_from_mysql = mysql_select_table(mysql_cursor, 'wp_posts', where='post_title="%s"' % csv_value['title'], fetch='one')
             if post_from_mysql:
