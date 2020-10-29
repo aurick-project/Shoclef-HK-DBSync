@@ -461,6 +461,11 @@ def start_sync_products_temp():
         if exist_product_in_log:
             print('product exist in log %s' % product['ID'])
             continue
+        postmetas = mysql_select_table(mysql_cursor, 'wp_postmeta', where='post_id=%s' % product['ID'])
+        if postmetas in [None, []]:
+            print('invalid product, -- delete')
+            mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % product['ID'])
+            continue
         wp = woo_product_one(wapi, woo_id=product['ID'])
         if wp:
             sync_statues = get_status('products')
