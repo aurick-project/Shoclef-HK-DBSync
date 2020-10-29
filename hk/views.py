@@ -279,6 +279,29 @@ def start_sync_products():
     print('start syncing products')
     print('-' * 30)
     # print('get products from mongo')
+    print('read products from file')
+    mysql_conn = mysql_db_connect(hk_mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+
+    with open('uploads/products-shoclef.com-modified-10282020.csv', 'r', encoding='utf-8') as csvfile:
+        csv_values = csv.DictReader(csvfile)
+        for csv_value in csv_values:
+            print(csv_value['title'], csv_value['email'])
+            post_from_mysql = mysql_select_table(mysql_cursor, 'wp_posts', where='post_title="%s"' % csv_value['title'], fetch='one')
+            if post_from_mysql:
+                print('found in woocommerce %s' % post_from_mysql['ID'])
+                user_from_mysql = mysql_select_table(mysql_cursor, 'wp_users', where='user_email="%s"' % csv_value['email'], fetch='one')
+                if user_from_mysql:
+                    print('found in user list %s, updating----' % user_from_mysql['ID'])
+                    mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
+    # get currency convert rate
+    save_status('products', 0)
+
+
+def start_sync_products_temp():
+    print('start syncing products')
+    print('-' * 30)
+    # print('get products from mongo')
 
     # get currency convert rate
     cc_res = []
@@ -664,6 +687,14 @@ def start_sync_livestreams():
             break
         print('livestream', livestream['_id'])
         add_livestream(wapi, mongo_db, mysql_conn, mysql_cursor, livestream)
+
+    # sync from woo to mongo
+    mysql_conn = mysql_db_connect(hk_mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+
+    woo_livestreams = woo_livestreams_get(mysql_conn, mysql_cursor)
+
+    mysql_db_close(mysql_conn, mysql_cursor)
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('livestreams', 0)
 

@@ -224,8 +224,8 @@ def add_livestream_experience(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
         return exist_cat.woo_id
 
     exp_data = {
-        'name': mongo_cat['name'],
-        'slug': mongo_cat['id'],
+        'name':        mongo_cat['name'],
+        'slug':        mongo_cat['id'],
         'description': mongo_cat['description']
     }
     cat_assets = None
@@ -247,3 +247,29 @@ def add_livestream_experience(wapi, mapi, mysql_conn, mysql_cursor, mongo_cat):
         save_livestream_experience_to_log(mongo_cat['_id'], cat_data.json()['id'])
         return cat_data.json()['id']
     return None
+
+
+def woo_livestreams_get(mysql_conn, mysql_cursor):
+    livestreams = mysql_select_table(mysql_cursor, 'wp_posts', where='post_type="livestream" and post_status="publish"')
+    livestream_data = []
+    for livestream in livestreams:
+        exist_livestream_log = get_livestream_from_log(woo_id=livestream['ID'])
+        if exist_livestream_log:
+            print('Livesteram exist in mongo and woo %s' % livestream['post_title'])
+            continue
+
+        livestream_data_one = {'id': livestream['ID'], 'title': livestream['post_title']}
+        livestream_metas = mysql_select_table(mysql_cursor, 'wp_postmeta', where='post_id=%s' % livestream['ID'])
+        livestream_data_products = []
+        for livestream_meta in livestream_metas:
+            if livestream_meta['meta_key'] == 'productlist':
+                livestream_products = livestream_meta['meta_value'].split(',')
+                for livestream_product in livestream_products:
+
+                    # check if product already registered
+                    exist_livestream_product_log = get_product_from_log(woo_id=livestream_product)
+                    if exist_livestream_product_log:
+                        livestream_data_products.append(exist_livestream_product_log.mongo_id)
+                    else:
+                        print('product not registered on log [woo_id=%s]' % livestream)
+
