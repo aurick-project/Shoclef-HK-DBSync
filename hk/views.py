@@ -275,7 +275,7 @@ def start_sync_categories_delete():
     save_status('categories_delete', 0)
 
 
-def start_sync_products():
+def start_sync_products_temp_for_user_assign():
     print('start syncing products')
     print('-' * 30)
     # print('get products from mongo')
@@ -312,7 +312,7 @@ def start_sync_products():
     save_status('products', 0)
 
 
-def start_sync_products_temp():
+def start_sync_products():
     print('start syncing products')
     print('-' * 30)
     # print('get products from mongo')
