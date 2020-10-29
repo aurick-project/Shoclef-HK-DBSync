@@ -291,16 +291,20 @@ def start_sync_products():
                 print('-' * 30)
                 print('Break syncing...')
                 break
-            print('-' * 50)
-            print(csv_value['title'], csv_value['email'])
-            print('*' * 50)
+            # print('-' * 50)
+            # print(csv_value['title'], csv_value['email'])
+            # print('*' * 50)
             post_from_mysql = mysql_select_table(mysql_cursor, 'wp_posts', where='post_title="%s"' % csv_value['title'], fetch='one')
             if post_from_mysql:
-                print('found in woocommerce %s' % post_from_mysql['ID'])
+                # print('found in woocommerce %s' % post_from_mysql['ID'])
                 user_from_mysql = mysql_select_table(mysql_cursor, 'wp_users', where='user_email="%s"' % csv_value['email'], fetch='one')
                 if user_from_mysql:
+                    continue
                     print('found in user list %s, updating----' % user_from_mysql['ID'])
-                    mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
+                else:
+                    print(csv_value['title'], csv_value['email'])
+
+            # mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
     # get currency convert rate
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products', 0)
