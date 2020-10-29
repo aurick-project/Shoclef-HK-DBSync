@@ -9,7 +9,7 @@ def user_add(mapi, wapi, user):
     # check if user name already exist in log
     print(user['_id'])
     email = user['_id'] + '@tempmail.tmp'
-    if 'email' in user:
+    if 'email' in user and user['email']:
         email = user['email']
     try:
         name = email.split('@')[0]
