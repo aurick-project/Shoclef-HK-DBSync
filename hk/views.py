@@ -302,6 +302,7 @@ def start_sync_products():
                     print('found in user list %s, updating----' % user_from_mysql['ID'])
                     mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
     # get currency convert rate
+    mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products', 0)
 
 
