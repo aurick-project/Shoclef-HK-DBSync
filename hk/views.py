@@ -294,10 +294,10 @@ def start_sync_products():
             # print('-' * 50)
             # print(csv_value['title'], csv_value['email'])
             # print('*' * 50)
-            post_from_mysql = mysql_select_table(mysql_cursor, 'wp_posts', where='post_title="%s"' % csv_value['title'], fetch='one')
+            post_from_mysql = mysql_select_table(mysql_cursor, 'wp_posts', where='post_title="%s"' % csv_value['title'].strip(), fetch='one')
             if post_from_mysql:
                 # print('found in woocommerce %s' % post_from_mysql['ID'])
-                user_from_mysql = mysql_select_table(mysql_cursor, 'wp_users', where='user_email="%s"' % csv_value['email'], fetch='one')
+                user_from_mysql = mysql_select_table(mysql_cursor, 'wp_users', where='user_email="%s"' % csv_value['email'].strip(), fetch='one')
                 if user_from_mysql:
                     continue
                     print('found in user list %s, updating----' % user_from_mysql['ID'])
