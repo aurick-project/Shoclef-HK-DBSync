@@ -508,7 +508,7 @@ def start_sync_products():
                     if user_email not in user_name_list:
                         user_name_list[user_email] = ['men_clothing1@shoclef.com', 'Forward Designs']
                 else:
-                    user_email = 'men_clothing1@shoclef.com'
+                    user_email = 'consumer_electronics3@shoclef.com'
             if user_email != '':
                 prod_data['username'] = prod_data['brand_name'] = prod_data['seller_name'] = user_name_list[user_email][1]
                 prod_data['email'] = user_name_list[user_email][0]
