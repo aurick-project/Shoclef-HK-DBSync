@@ -299,13 +299,13 @@ def start_sync_products():
                 # print('found in woocommerce %s' % post_from_mysql['ID'])
                 user_from_mysql = mysql_select_table(mysql_cursor, 'wp_users', where='user_email="%s"' % csv_value['email'].strip(), fetch='one')
                 if user_from_mysql:
-                    continue
+                    # continue
                     print('found in user list %s, updating----' % user_from_mysql['ID'])
+                    mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
                 else:
                     print(2, '---', csv_value['title'], csv_value['email'])
             else:
                 print(1, '------', csv_value['title'], csv_value['email'])
-            # mysql_update_table(mysql_conn, mysql_cursor, 'wp_posts', {'post_author': user_from_mysql['ID']}, 'ID=%s' % post_from_mysql['ID'])
     # get currency convert rate
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products', 0)
@@ -429,12 +429,12 @@ def start_sync_products_temp():
         'car_vehicle_electronics1@shoclef.com': ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
         'car_vehicle_electronics2@shoclef.com': ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
         'car_vehicle_electronics3@shoclef.com': ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
-        'cell_phones1@shoclef.com':             ['consumer_electronics1@shoclef.com', "Thompson's Goods"],
-        'cell_phones2@shoclef.com':             ['consumer_electronics1@shoclef.com', "Thompson's Goods"],
-        'cell_phones3@shoclef.com':             ['consumer_electronics1@shoclef.com', "Thompson's Goods"],
-        'computers_tablets1@shoclef.com':       ['consumer_electronics1@shoclef.com', 'Electronics Village'],
-        'computers_tablets2@shoclef.com':       ['consumer_electronics1@shoclef.com', 'Electronics Village'],
-        'computers_tablets3@shoclef.com':       ['consumer_electronics1@shoclef.com', 'Electronics Village'],
+        'cell_phones1@shoclef.com':             ['consumer_electronics2@shoclef.com', "Thompson's Goods"],
+        'cell_phones2@shoclef.com':             ['consumer_electronics2@shoclef.com', "Thompson's Goods"],
+        'cell_phones3@shoclef.com':             ['consumer_electronics2@shoclef.com', "Thompson's Goods"],
+        'computers_tablets1@shoclef.com':       ['consumer_electronics3@shoclef.com', 'Electronics Village'],
+        'computers_tablets2@shoclef.com':       ['consumer_electronics3@shoclef.com', 'Electronics Village'],
+        'computers_tablets3@shoclef.com':       ['consumer_electronics3@shoclef.com', 'Electronics Village'],
         'gadgets1@shoclef.com':                 ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
         'gadgets2@shoclef.com':                 ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
         'gadgets3@shoclef.com':                 ['consumer_electronics1@shoclef.com', 'Riviera Electronics'],
@@ -444,9 +444,9 @@ def start_sync_products_temp():
         'women_clothing1@shoclef.com':          ['women_clothing1@shoclef.com', 'Peachy Fashion'],
         'women_clothing2@shoclef.com':          ['women_clothing2@shoclef.com', 'Alyssum Fashion'],
         'women_clothing3@shoclef.com':          ['women_clothing3@shoclef.com', 'Hibiscus Designs'],
-        'women_handbags_wallets1@shoclef.com':  ['women_bags1@sholef.com', 'B&Z'],
-        'women_handbags_wallets2@shoclef.com':  ['women_bags2@sholef.com', 'Fashion Diva'],
-        'women_handbags_wallets3@shoclef.com':  ['women_bags3@sholef.com', 'Honeyland Company'],
+        'women_handbags_wallets1@shoclef.com':  ['women_bags1@shoclef.com', 'B&Z'],
+        'women_handbags_wallets2@shoclef.com':  ['women_bags2@shoclef.com', 'Fashion Diva'],
+        'women_handbags_wallets3@shoclef.com':  ['women_bags3@shoclef.com', 'Honeyland Company'],
         'women_shoes1@shoclef.com':             ['women_shoes1@shoclef.com', 'Slowgold Designs'],
         'women_shoes2@shoclef.com':             ['women_shoes2@shoclef.com', 'Silverose Fashion'],
         'women_shoes3@shoclef.com':             ['women_shoes3@shoclef.com', 'MRYA']
