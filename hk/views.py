@@ -489,7 +489,7 @@ def start_sync_products():
                 'shippingBoxWidth':   '0',
                 'shippingBoxHeight':  '0',
                 'shippingBoxLength':  '0',
-                'unit':               'inch',
+                'unit':               'INCH',
                 'brand_name':         '',
                 'seller_name':        'management',
                 'price':              wp['sale_price'] if wp['sale_price'] else 0,
@@ -551,7 +551,7 @@ def start_sync_products():
                     continue
                 # print(prod_attributes)
                 # pprint(prod_variations)
-                prod_data['attributeNames'] = ';'.join(prod_attributes)
+                prod_data['attributeNames'] = (';'.join(prod_attributes)).replace('&amp;', '&')
                 prod_data['attributeValues'] = ''
                 for prod_var in prod_variations:
                     for prod_attr in prod_attributes:
@@ -560,7 +560,7 @@ def start_sync_products():
                         else:
                             prod_data['attributeValues'] += '0'
                     prod_data['attributeValues'] += '%s|%s|%s;' % (prod_var['price'], prod_var['oldPrice'], prod_var['quantity'])
-                prod_data['attributeValues'] = prod_data['attributeValues'][:-1]
+                prod_data['attributeValues'] = prod_data['attributeValues'][:-1].replace('&amp;', '&')
             wp_images = wp['images']
             wpi = 0
             for wp_image in wp_images[:14]:
