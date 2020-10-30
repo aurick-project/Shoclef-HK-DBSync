@@ -1,5 +1,7 @@
 import csv
+import os
 import random
+import uuid
 
 from bs4 import BeautifulSoup as bs
 from django.http import HttpResponse
@@ -475,7 +477,7 @@ def start_sync_products():
                 break
             print('process product %s' % wp['id'])
             prod_data = {
-                '_id':                '',
+                '_id':                uuid.uuid4(),
                 'username':           'Designer Creations',
                 'email':              'shoclef.outnet@shoclef.com',
                 'freeDeliveryTo':     'DOMESTIC',
@@ -500,6 +502,12 @@ def start_sync_products():
                 'attributeNames':     '',
                 'attributeValues':    '',
             }
+            while True:
+                check_id = mongo_db['products'].find({'_id': prod_data['_id']})
+                if check_id:
+                    prod_data['_id'] = uuid.uuid4()
+                else:
+                    break
             user_email = ''
             if wp['categories']:
                 prod_data['categoryID'] = wp['categories'][0]['slug']
@@ -699,11 +707,24 @@ def start_sync_products():
                   'shippingBoxHeight', 'shippingBoxLength', 'unit', 'brand_name', 'seller_name', 'price', 'oldPrice', 'quantity', 'customCarrier', 'customCarrierValue',
                   'attributeNames', 'attributeValues']
 
-    with open('uploads/products-shoclef.com-%s.csv' % (datetime.datetime.now().strftime('%Y%m%d%H%M%S')), 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=csv_fields)
-        writer.writeheader()
-        for csv_value in csv_values:
-            writer.writerow(csv_value)
+    cur_date = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    try:
+        os.mkdir('uploads/%s' % cur_date)
+    except:
+        print('make dir failed uploads/%s' % 'cur_date')
+    part_index = 0
+    part_size = 500
+    while True:
+        csv_values_part = csv_values[part_index * part_size: (part_index + 1) * part_size - 1]
+        if csv_values_part:
+            part_index += 1
+            with open('uploads/%s/products-shoclef.com-part%s.csv' % (cur_date, part_index), 'w', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=csv_fields)
+                writer.writeheader()
+                for csv_value in csv_values_part:
+                    writer.writerow(csv_value)
+        else:
+            break
     print(user_name_list)
     if products_no_variation:
         products_without_variations_fields = ['id', 'name', 'link']
