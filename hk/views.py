@@ -762,10 +762,15 @@ def start_sync_products_delete():
             print('1 Break syncing...')
             break
         woo_prods = woo_products(wapi, page, per_page)
-        # page += 1
+        page += 1
         if woo_prods:
             delete_ids = []
             for wc in woo_prods:
+                if wc['images']:
+                    for wc_image in wc['images']:
+                        wc_src = wc_image['src'].replace(woocommerce['url'], woocommerce['local_path'])
+                        if os.path.exists(wc_src):
+                            os.remove(wc_src)
                 delete_ids.append(wc['id'])
             delete_product_from_woocommerce(wapi, delete_ids)
         else:
