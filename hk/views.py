@@ -767,8 +767,7 @@ def start_sync_products_delete():
                 print('post id %s' % pi)
                 image_post = mysql_select_table(mysql_cursor, 'wp_posts', where='ID=%s' % pi, fetch='one')
                 if image_post:
-                    if os.path.exists(woocommerce['local_path'] + "wp-content/uploads/%s" % image_post['guid'].replace('https://shoclef.com/', woocommerce['local_path']).replace(
-                            'http://shoclef.com/', woocommerce['local_path'])):
+                    if os.path.exists(image_post['guid'].replace('https://shoclef.com/', woocommerce['local_path']).replace('http://shoclef.com/', woocommerce['local_path'])):
                         print('image exist--delete %s' % image_post['post_name'])
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products_delete', 0)
