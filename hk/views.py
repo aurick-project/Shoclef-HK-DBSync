@@ -774,7 +774,7 @@ def start_sync_products_delete():
                         if not os.path.exists(local_path):
                             print('deleted')
                 print('delete images from posts')
-                mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % pi)
+                # mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % pi)
     #
     # print('delete from wp_term_relationships, wp_term_taxonomy, wp_terms')
     # mysql_delete_table(
