@@ -767,8 +767,31 @@ def start_sync_products_delete():
                 print('post id %s' % pi)
                 image_post = mysql_select_table(mysql_cursor, 'wp_posts', where='ID=%s' % pi, fetch='one')
                 if image_post:
-                    if os.path.exists(image_post['guid'].replace('https://shoclef.com/', woocommerce['local_path']).replace('http://shoclef.com/', woocommerce['local_path'])):
-                        print('image exist--delete %s' % image_post['post_name'])
+                    local_path = image_post['guid'].replace('https://shoclef.com/', woocommerce['local_path']).replace('http://shoclef.com/', woocommerce['local_path'])
+                    if os.path.exists(local_path):
+                        print('image exist--delete %s -- | ' % image_post['post_name'], end=' ')
+                        os.remove(local_path)
+                        if not os.path.exists(local_path):
+                            print('deleted')
+                print('delete images from posts')
+                mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % pi)
+
+    print('delete from wp_term_relationships, wp_term_taxonomy, wp_terms')
+    mysql_delete_table(
+        mysql_conn,
+        mysql_cursor,
+        'wp_term_relationships AS relations '
+        'INNER JOIN wp_term_taxonomy AS taxes ON relations.term_taxonomy_id=taxes.term_taxonomy_id '
+        'INNER JOIN wp_terms AS terms ON taxes.term_id=terms.term_id',
+        "object_id IN (SELECT ID FROM wp_posts WHERE post_type='product')"
+    )
+
+    print('delete from post_meta')
+    mysql_delete_table(mysql_conn, mysql_cursor, 'wp_postmeta', "post_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')")
+
+    print('delete from posts')
+    mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', "post_type = 'product'")
+
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products_delete', 0)
 
