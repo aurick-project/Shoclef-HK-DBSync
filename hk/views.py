@@ -749,6 +749,27 @@ def start_sync_products():
 
 
 def start_sync_products_delete():
+    print('start delete all products')
+    print('-' * 30)
+    mysql_conn = mysql_db_connect(hk_mysql)
+    mysql_cursor = mysql_conn.cursor(dictionary=True, buffered=True)
+    print('delete all product galleries')
+    product_galleries = mysql_select_table(mysql_cursor, 'wp_postmeta', where='meta_key="_thumbnail_id" or meta_key="_product_image_gallery"')
+    if product_galleries:
+        for pg in product_galleries:
+            post_ids = pg['meta_value'].split(',')
+            for pi in post_ids:
+                image_post = mysql_select_table(mysql_cursor, 'wp_posts', where='ID=%s' % pi, fetch='one')
+                if image_post:
+                    if os.path.exists(woocommerce['local_path'] + "wp-contents/uploads/%s" % image_post['post_name'])
+                        print('image exist--delete %s' % image_post['post_name'])
+            mysql_db_close(mysql_conn, mysql_cursor)
+            save_status('products_delete', 0)
+            return
+
+
+
+def start_sync_products_delete_temp_by_api():
     print('start syncing products delete')
     print('-' * 30)
     print('get products delete syncing status from db')
@@ -772,7 +793,6 @@ def start_sync_products_delete():
                         wc_src = wc_image['src'].replace(woocommerce['url'], woocommerce['local_path']).replace(woocommerce['url'].replace('https', 'http'),
                                                                                                                 woocommerce['local_path'])
                         print(wc_src, '\n', '-' * 50)
-
                         if os.path.exists(wc_src):
                             os.remove(wc_src)
                 delete_ids.append(wc['id'])
