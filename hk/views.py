@@ -768,7 +768,8 @@ def start_sync_products_delete():
             for wc in woo_prods:
                 if wc['images']:
                     for wc_image in wc['images']:
-                        wc_src = wc_image['src'].replace(woocommerce['url'], woocommerce['local_path'])
+                        wc_src = wc_image['src'].replace(woocommerce['url'], woocommerce['local_path']).replace(woocommerce['url'].replace('https', 'http'),
+                                                                                                                woocommerce['local_path'])
                         if os.path.exists(wc_src):
                             os.remove(wc_src)
                 delete_ids.append(wc['id'])
