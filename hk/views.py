@@ -757,16 +757,20 @@ def start_sync_products_delete():
     product_galleries = mysql_select_table(mysql_cursor, 'wp_postmeta', where='meta_key="_thumbnail_id" or meta_key="_product_image_gallery"')
     if product_galleries:
         for pg in product_galleries:
+            sync_statues = get_status('products_delete')
+            if sync_statues.state == 0:
+                print('-' * 30)
+                print('1 Break syncing...')
+                break
             post_ids = pg['meta_value'].split(',')
             for pi in post_ids:
                 print('post id %s' % pi)
                 image_post = mysql_select_table(mysql_cursor, 'wp_posts', where='ID=%s' % pi, fetch='one')
                 if image_post:
-                    if os.path.exists(woocommerce['local_path'] + "wp-contents/uploads/%s.%s" % (image_post['post_name'][:-4], image_post['post_name'][-3:])):
+                    if os.path.exists(woocommerce['local_path'] + "wp-content/uploads/%s.%s" % (image_post['post_name'][:-4], image_post['post_name'][-3:])):
                         print('image exist--delete %s' % image_post['post_name'])
-                        mysql_db_close(mysql_conn, mysql_cursor)
-                        save_status('products_delete', 0)
-                        return
+    mysql_db_close(mysql_conn, mysql_cursor)
+    save_status('products_delete', 0)
 
 
 def start_sync_products_delete_temp_by_api():
