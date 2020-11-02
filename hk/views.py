@@ -765,6 +765,7 @@ def start_sync_products_delete():
         page += 1
         if woo_prods:
             delete_ids = []
+            print('-' * 50, '\ndelete product images')
             for wc in woo_prods:
                 if wc['images']:
                     for wc_image in wc['images']:
