@@ -789,11 +789,11 @@ def start_sync_products_delete():
     print('delete from wp_wc_product_meta_lookup')
     mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_wc_product_meta_lookup WHERE product_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')")
 
-    print('delete from post_meta')
-    mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_postmeta WHERE post_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')")
-
-    print('delete from posts')
-    mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_posts WHERE post_type = 'product'")
+    # print('delete from post_meta')
+    # mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_postmeta WHERE post_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')")
+    #
+    # print('delete from posts')
+    # mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_posts WHERE post_type = 'product'")
 
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products_delete', 0)
