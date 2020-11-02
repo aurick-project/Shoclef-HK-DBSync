@@ -754,7 +754,7 @@ def start_sync_products_delete():
     print('get products delete syncing status from db')
     wapi = woo_api(woocommerce)
     page = 1
-    per_page = 2
+    per_page = 10
     while True:
         sync_statues = get_status('products_delete')
         if sync_statues.state == 0:
