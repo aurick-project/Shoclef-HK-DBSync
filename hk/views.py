@@ -771,11 +771,12 @@ def start_sync_products_delete():
                     for wc_image in wc['images']:
                         wc_src = wc_image['src'].replace(woocommerce['url'], woocommerce['local_path']).replace(woocommerce['url'].replace('https', 'http'),
                                                                                                                 woocommerce['local_path'])
-                        print(wc_src, '-' * 50)
+                        print(wc_src, '\n-' * 50)
 
                         if os.path.exists(wc_src):
                             os.remove(wc_src)
                 delete_ids.append(wc['id'])
+            print('-'* 50, '\n delete products')
             delete_product_from_woocommerce(wapi, delete_ids)
         else:
             break
