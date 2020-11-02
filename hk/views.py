@@ -776,23 +776,24 @@ def start_sync_products_delete():
                     else:
                         print('image not found \n', image_post['guid'], '\n', local_path)
                 print('delete images from posts')
-                # mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % pi)
-    #
-    # print('delete from wp_term_relationships, wp_term_taxonomy, wp_terms')
-    # mysql_delete_table(
-    #     mysql_conn,
-    #     mysql_cursor,
-    #     'wp_term_relationships AS relations '
-    #     'INNER JOIN wp_term_taxonomy AS taxes ON relations.term_taxonomy_id=taxes.term_taxonomy_id '
-    #     'INNER JOIN wp_terms AS terms ON taxes.term_id=terms.term_id',
-    #     "object_id IN (SELECT ID FROM wp_posts WHERE post_type='product')"
-    # )
-    #
-    # print('delete from post_meta')
-    # mysql_delete_table(mysql_conn, mysql_cursor, 'wp_postmeta', "post_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')")
-    #
-    # print('delete from posts')
-    # mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', "post_type = 'product'")
+                mysql_delete_table(mysql_conn, mysql_cursor, 'wp_posts', 'ID=%s' % pi)
+
+    print('delete from wp_term_relationships, wp_term_taxonomy, wp_terms')
+    mysql_execute_table(
+        mysql_conn,
+        mysql_cursor,
+        "DELETE relations.*, taxes.*, terms.* FROM wp_term_relationships AS relations INNER JOIN wp_term_taxonomy AS taxes ON relations.term_taxonomy_id=taxes.term_taxonomy_id "
+        "INNER JOIN wp_terms AS terms ON taxes.term_id=terms.term_id WHERE object_id IN (SELECT ID FROM wp_posts WHERE post_type='product') "
+    )
+
+    print('delete from wp_wc_product_meta_lookup')
+    mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_wc_product_meta_lookup WHERE product_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')")
+
+    print('delete from post_meta')
+    mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_postmeta WHERE post_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')")
+
+    print('delete from posts')
+    mysql_execute_table(mysql_conn, mysql_cursor, "DELETE FROM wp_posts WHERE post_type = 'product'")
 
     mysql_db_close(mysql_conn, mysql_cursor)
     save_status('products_delete', 0)

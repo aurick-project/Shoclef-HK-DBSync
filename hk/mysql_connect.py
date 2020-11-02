@@ -165,3 +165,15 @@ def mysql_delete_table(db, cursor, table, where=''):
         print('delete failed %s' % query)
         print(e)
         return False
+
+
+def mysql_execute_table(db, cursor, query):
+    try:
+        cursor.execute(query)
+        db.commit()
+
+        return True
+    except Error as e:
+        print('query Failed', query)
+        print(e)
+        return False
