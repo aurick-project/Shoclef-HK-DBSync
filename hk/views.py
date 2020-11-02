@@ -763,10 +763,9 @@ def start_sync_products_delete():
                 if image_post:
                     if os.path.exists(woocommerce['local_path'] + "wp-contents/uploads/%s" % image_post['post_name']):
                         print('image exist--delete %s' % image_post['post_name'])
-            mysql_db_close(mysql_conn, mysql_cursor)
-            save_status('products_delete', 0)
-            return
-
+                        mysql_db_close(mysql_conn, mysql_cursor)
+                        save_status('products_delete', 0)
+                        return
 
 
 def start_sync_products_delete_temp_by_api():
