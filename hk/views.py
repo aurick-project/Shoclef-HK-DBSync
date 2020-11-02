@@ -761,7 +761,7 @@ def start_sync_products_delete():
             for pi in post_ids:
                 image_post = mysql_select_table(mysql_cursor, 'wp_posts', where='ID=%s' % pi, fetch='one')
                 if image_post:
-                    if os.path.exists(woocommerce['local_path'] + "wp-contents/uploads/%s" % image_post['post_name'])
+                    if os.path.exists(woocommerce['local_path'] + "wp-contents/uploads/%s" % image_post['post_name']):
                         print('image exist--delete %s' % image_post['post_name'])
             mysql_db_close(mysql_conn, mysql_cursor)
             save_status('products_delete', 0)
