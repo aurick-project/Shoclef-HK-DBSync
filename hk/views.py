@@ -762,7 +762,7 @@ def start_sync_products_delete():
             print('1 Break syncing...')
             break
         woo_prods = woo_products(wapi, page, per_page)
-        page += 1
+        # page += 1
         if woo_prods:
             delete_ids = []
             for wc in woo_prods:
