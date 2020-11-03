@@ -1,5 +1,8 @@
 /.idea
 /venv
 /db.sqlite3
-/hk/settings.py
 /uploads
+/hk/settings.py
+
+/en/migrations
+/en/env.py
